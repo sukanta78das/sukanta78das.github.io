@@ -1,104 +1,570 @@
-<!DOCTYPE html>
-<!-- Template by Quackit.com -->
-<!-- Images by various sources under the Creative Commons CC0 license and/or the Creative Commons Zero license. 
-Although you can use them, for a more unique website, replace these images with your own. -->
-<html lang="en">
+<!doctype html>
+<!--
+	The7 by TEMPLATE STOCK
+	templatestock.co @templatestock
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
 
 <head>
-
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Cellular Automata India</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/simplegrid.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/lightcase.css">
+    <link rel="stylesheet" href="js/owl-carousel/owl.carousel.css" />
+    <link rel="stylesheet" href="js/owl-carousel/owl.theme.css" />
+    <link rel="stylesheet" href="js/owl-carousel/owl.transitions.css" />
+    <link rel="stylesheet" href="style.css">
 
-    <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
-    <link href="css/custom.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+           <![endif]-->
+    <script>
+        function update(str) {
+            // var e = document.getElementById("nav_1 ");
+            // var newSrc = e.getElementsByTagName("li ").value;
+            document.getElementById("ascat2022Frame ").src = str;
+            document.getElementById("ascat2022Frame").contentDocument.location.reload(true);
+            $('#ascat2022Frame').attr('src', str);
+            alert(str);
 
-    <!-- Custom Fonts from Google -->
-    <link
-        href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
-        rel='stylesheet' type='text/css'>
-
+        }
+    </script>
 </head>
 
-<body>
-
-    <!-- Navigation -->
-    <nav id="siteNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <!-- Logo and responsive toggle -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <span class="glyphicon glyphicon-fire"></span>
-                    LOGO
-                </a>
-            </div>
-            <!-- Navbar links -->
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="active">
-                        <a href="#">Home</a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false">ASCAT <span class="caret"></span></a>
-                        <ul class="dropdown-menu" aria-labelledby="about-us">
-                            <li><a href="https://www.cellularautomata.in/ascat2022/">2022</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                </ul>
-
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container -->
-    </nav>
-
+<body id="home">
     <!-- Header -->
-    <header>
-        <div class="header-content">
-            <div class="header-content-inner">
-                <h1>Cellular Automata India</h1>
-               <!-- <p>Indian Institute of Engineering Science and Technology, Shibpur</p> -->
-                <a href="https://www.cellularautomata.in/ascat2022/" class="btn btn-primary btn-lg">ASCAT 2022</a>
+    <header id="top-header" class="header-home">
+        <div class="grid">
+            <div class="col-1-1">
+                <div class="content">
+                    <div class="logo-wrap">
+                        <a href="#0" class="logo">LOGO</a>
+                    </div>
+                    <nav class="navigation">
+                        <input type="checkbox" id="nav-button">
+                        <label for="nav-button" onclick></label>
+                        <ul class="nav-container">
+                            <!-- <li>
+                                <a href="#home" class="current"><img class="btn-ghost" src="images/index.png " width="25px" height="21px" alt="index"></a>
+                            </li> -->
+                            <li><a href="#home" class="current">Home</a></li>
+                            <li>
+                                <a href="#webiner">Webiner</a>
+                            </li>
+                            <li><a href="#ascat2022">ASCAT</a></li>
+                            <li><a href="#SummerSchool">Summer School</a></li>
+                            <!-- <li><a href="#UpcomingEvents">Upcoming Events</a></li> -->
+                            <!-- <li><a href="#team">Team</a></li> -->
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </header>
+    <!-- End Header -->
 
+    <!-- Parallax Section -->
+    <div class="parallax-section parallax1">
+        <div class="grid grid-pad">
+            <div class="col-1-1">
+                <div class="content content-header">
+                    <h2>Cellular Automata India</h2>
+                    <p>This webpage is created to post about Theory and Applications Cellular Automata (CAs), different related events, discourse of lecture series, associated webinars and academic talks, and to initiate and encourage further discussions
+                        on them. For more details, please visit our YouTube channel Cellular Automata India</p>
+                    <a href="#blog" class="btn btn-ghost">Find Out More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Parallax Section -->
 
+    <!-- CurveUp -->
+    <svg class="curveUpColor" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z"></path>
+            </svg>
 
+    <!-- webiner Section -->
+    <div class="wrap services-wrap" id="webiner">
+        <section class="grid grid-pad services">
+            <h2>
+                <a href="Webiner/index.html">Webiner & Workshop</a></h2>
+            <div class="col-1-2 service-box service-1">
+                <div class="content">
+                    <div class="service-icon">
+                        <!-- <i class="circle-icon icon-heart4"></i> -->
+                        <i class="circle-icon icon-display"></i>
+                    </div>
+                    <div class="service-entry">
+                        <h3>Webiner</h3>
+                        <p>Two webiner series and a Lecture Series on the Memory of Prof. Conway are organized by Cellular Automata India</p>
+                        <a class="btn read-more" href="Webiner/webiner.html">Read More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1-2 service-box service-2">
+                <div class="content">
+                    <div class="service-icon">
+                        <!-- <i class="circle-icon icon-star4"></i> -->
+                        <i class="circle-icon icon-display"></i>
+                    </div>
+                    <div class="service-entry">
+                        <h3>Workshop</h3>
+                        <p>One-week Online Workshop on Cellular Automata and Secured Hardware Design held on March 15 - 19, 2021</p>
+                        <a class="btn read-more" href="Webiner/workshopTab.html">Read More</a>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-1-4 service-box service-3">
+                <div class="content">
+                    <div class="service-icon">
+                        <i class="circle-icon icon-display"></i>
+                    </div>
+                    <div class="service-entry">
+                        <h3>Day 3</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat tellus eget libero pretium, sollicitudin feugiat libero.</p>
+                        <a class="btn read-more" href="#0">Read More</a>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="col-1-4 service-box service-4">
+                <div class="content">
+                    <div class="service-icon">
+                        <i class="circle-icon icon-user6"></i>
+                        <i class="circle-icon icon-display"></i>
+                    </div>
+                    <div class="service-entry">
+                        <h3>Day 4</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat tellus eget libero pretium, sollicitudin feugiat libero.</p>
+                        <a class="btn read-more" href="#0">Read More</a>
+                    </div>
+                </div>
+            </div> -->
+        </section>
+    </div>
+    <!-- End webiner Section -->
+    <!-- CurveDown -->
+    <svg class="curveDownColor" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 0 C 50 100 80 100 100 0 Z"></path>
+            </svg>
 
+    <!-- ascat2022 Section -->
+    <div class="wrap grey recent-wrap" id="ascat2022">
+        <section class="grid grid-pad">
+            <h2>Ascat 2022</h2>
+            <p>First Asian Symposium on Cellular Automata Technology <br> (ASCAT 2022)
+                <br> March 03-05, 2022 (Online)</br>
+            </p>
+            <!-- <iframe id="indexIframe1" name="indexIframe" src="Ascat2022.html" width="100%" height="800">
+                </iframe> -->
 
-    <!-- jQuery -->
-    <script src="js/jquery-1.11.3.min.js"></script>
+            <p style="text-align:justify;margin:15px;">
+                Cellular Automaton (CA), one of the most emergent areas in natural computing, is a paradigm of uniform fine-grained parallel computation which has been explored to understand complex systems by developing its model at the microscopic level. CA is modular,
+                scalable and capable of massively parallel computation. These features, along with its capability of performing arbitrary computation tasks, self-organizing ability and self-reproducibility have attracted attention of researchers to exploit
+                CA as technology to solve many real-life problems in the domain of VLSI (very large scale integration) design and test, pattern recognition and classification, cryptography, pseudo random pattern generation, in-memory computation, image
+                processing, data compression, medical imaging, bioinformatics etc. </br>
+                </br>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+                Since long, India has played a significant role in research on cellular automata (CAs): theory and applications. A number of workshops and seminars on CAs have also been organized in India. Not only India, other Asian countries like Japan, Turkey, Vietnam,
+                Taiwan, etc. also contribute significantly in Cellular Automata research. In fact, to this date, an important part of research in cellular automata, both in terms of quality and quantity, comes from the Asian community of CAs researchers.
+                Many of them work in the domain of Cellular Automata Technology. However, there is no conference or symposium organized till date in India or anywhere in the world dedicated to this topic.</br>
+                </br>
 
-    <!-- Plugin JavaScript -->
-    <script src="js/jquery.easing.min.js"></script>
+                Recently, during this ongoing time of pandemic, some of the Indian researchers have come forward in creating a research group, Cellular Automata India where most of the CAs researchers and scientists from India as well as many renowned scientists from
+                around the globe have joined. Two webinar series have already been organized from this platform where eminent scientists have given invited talks and shared their research with the audience. The recording of the events are available at
+                <a href="https://www.youtube.com/channel/UCZr5vFtk5cPF9kwBrU92r5Q/featured">
+                    <font color="blue">Cellular Automata India YouTube channel</font>
+                </a>. This time this platform has been extended to start a new series of symposiums as a meeting place of the international intelligentsia to share, review, discuss and collaborate on CAs.</br>
+                </br>
 
-    <!-- Custom Javascript -->
-    <script src="js/custom.js"></script>
+                Target of this conference is to promote fundamental research on automata theory and CA based unconventional design approaches in state-of-the art technological solutions for different emergent areas and challenges. It can also popularize research on unconventional
+                computing among the academicians, scientists and engineers of Asian countries and promote international collaboration between Computer Scientists, Mathematicians and Technologists of Asia and the other parts of the world.</br>
+                <div class="service-entry">
+                    <a class="btn btn-price " href="https://www.cellularautomata.in/ascat2022/">More Details</a></div>
+
+                <!-- Start of Filter section -->
+                
+                <!-- End Work Section -->
+
+                <!-- CurveUp -->
+                <!-- <svg class="curveUpColor " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                <path d="M0 100 C 20 0 50 0 100 100 Z "></path>
+            </svg> -->
+
+                <!-- Quotes Section -->
+                <div class="wrap services-wrap ">
+                    <section class="grid grid-pad ">
+                        <div class="col-1-1 service-box cl-client-carousel-container ">
+                            <div class="content ">
+                                <div class="cl-client-carousel ">
+
+                                    <div class="item client-carousel-item ">
+                                        <!-- Start of item -->
+                                        <div class="quotes-icon ">
+                                            <i class="icon-quotes-left "></i>
+                                        </div>
+                                        <p>A cellular automaton is a collection of "colored " cells on a grid of specified shape that evolves through a number of discrete time steps according to a set of rules based on the states of neighboring cells.</p>
+                                        <!-- <h4>-David Bell</h4> -->
+                                    </div>
+                                    <!-- End of item -->
+
+                                    <div class="item client-carousel-item ">
+                                        <!-- Start of item -->
+                                        <div class="quotes-icon ">
+                                            <i class="icon-quotes-left "></i>
+                                        </div>
+                                        <p>They are far from the 'automata' of the Universe some think them to be. They dance the starry path and are sharpening their knowledge with every orbit of each positive thought travelled.</p>
+                                        <h4>-Gabriel Brunsdon</h4>
+                                    </div>
+                                    <!-- End of item -->
+                                    <div class="item client-carousel-item ">
+                                        <!-- Start of item -->
+                                        <div class="quotes-icon ">
+                                            <i class="icon-quotes-left "></i>
+                                        </div>
+                                        <p>It is perhaps a little humbling to discover that we as humans are in effect computationally no more capable than cellular automata with very simple rules. But the Principle of Computational Equivalence also implies
+                                            that the same is ultimately true of our whole universe. So while science has often made it seem that we as humans are somehow insignificant compared to the universe, the Principle of Computational Equivalence
+                                            now shows that in a certain sense we are at the same level as it is. For the principle implies that what goes on inside us can ultimately achieve just the same level of computational sophistication as our whole
+                                            universe.
+                                        </p>
+                                        <h4>-Stephen Wolfram</h4>
+                                    </div>
+                                    <!-- End of item -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- End Quotes Section -->
+
+                <!-- CurveDown -->
+                <svg class="curveDownColor " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                <path d="M0 0 C 50 100 80 100 100 0 Z "></path>
+            </svg>
+
+                <!-- Blog Section -->
+                <div class="wrap blog-grid grey " id="blog">
+                    <div class="grid grid-pad ">
+                        <div class="content ">
+                            <!-- <h2>Unsere Arbeit</h2> -->
+                            <h2>Events</h2>
+                            <!--our work in german language-->
+                            <div class="col-1-2 ">
+                                <article class="post-wrap ">
+                                    <div class="post-img ">
+                                        <a href="#0 "><img src="images/post/post-n1.jpg " alt=" "></a>
+                                    </div>
+                                    <div class="post ">
+                                        <h2 class="entry-title "><a href="#0 ">Webiner & Workshop</a></h2>
+                                        <div class="post-meta ">
+                                            <a href="#0 ">16 Augast, 2020</a> <span class="mid-sep ">·</span> <a href="#0 ">webiner-workshop-lectures</a>
+                                        </div>
+                                        <p>This page is created to post about Theory and Applications Cellular Automata (CAs), different Workshops, discourse of lecture series, associated webinars and academic talks, and to initiate and encourage further
+                                            discussions on them.
+                                        </p>
+                                        <a class="btn read-more " href="Webiner/index.html ">Read More</a>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="col-1-2 ">
+                                <article class="post-wrap ">
+                                    <div class="post-img ">
+                                        <a href="#0 "><img src="images/post/post-n2.jpg " alt=" "></a>
+                                    </div>
+                                    <div class="post ">
+                                        <h2 class="entry-title "><a href="#0 ">ASCAT</a></h2>
+                                        <div class="post-meta ">
+                                            <a href="#0 ">03 March, 2022</a> <span class="mid-sep ">·</span> <a href="#0 ">Ascat-2022</a>
+                                        </div>
+                                        <p> Target of this conference is to promote fundamental research on automata theory and CA based unconventional design approaches in state-of-the art technological solutions for different emergent areas and challenges.
+
+                                        </p>
+                                        <a class="btn read-more " href="https://www.cellularautomata.in/ascat2022/">Read More</a>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="col-1-2 ">
+                                <article class="post-wrap " id="SummerSchool">
+                                    <div class="post-img ">
+                                        <a href="#0 "><img src="images/post/post-n3.jpg " alt=" "></a>
+                                    </div>
+                                    <div class="post ">
+                                        <h2 class="entry-title "><a href="#0 ">Indian Summer School </a></h2>
+                                        <div class="post-meta ">
+                                            <a href="#0 ">23rd May, 2022</a> <span class="mid-sep ">·</span> <a href="#0 ">Cellular Automata</a>
+                                        </div>
+                                        <p>This is the second year of internship program on Cellular Automata: Theory and Applications for the undergraduate students. This year the internship is more rigorously project based and the theory relevant to the
+                                            projects will be discussed in class. <br><b>Mode of Internship:</b> Hybrid.<br> <b>Registration Last Date:</b> 1st May 2022<br> <b>Duration: </b> 23rd May 2022 - 22nd July 2022</p>
+                                        <a class="btn read-more " href="SummerSchool/index.html">Read More</a>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="col-1-2 ">
+                                <article class="post-wrap " id="UpcomingEvents">
+                                    <div class="post-img ">
+                                        <a href="#0 "><img src="images/post/post-n4.png " alt=" "></a>
+                                    </div>
+                                    <div class="post ">
+                                        <h2 class="entry-title "><a href="#0 ">Upcoming Events</a></h2>
+                                        <div class="post-meta ">
+                                            <a href="#0 ">2022-2023</a> <span class="mid-sep ">·</span> <a href="#0 ">Cellular Automata</a>
+                                        </div>
+                                        <p>Indian Summer School on Cellular Automata 2022
+                                            <BR><b>Registration Last Date:</b> 1st May 2022<br> <b>Duration: </b> 23rd May 2022 - 22nd July 2022<br><br><br><br> <br></p>
+                                        <a class="btn read-more " href="SummerSchool/SummerSchool1/index.html">Read More</a>
+                                    </div>
+                                </article>
+                            </div>
+                            <!-- <div class="col-1-1 "><a class="btn " href="#0 ">View All</a></div> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End Blog Section -->
+
+                <!-- CurveUp -->
+                <svg class="curveUpColor " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                <path d="M0 100 C 20 0 50 0 100 100 Z "></path>
+            </svg>
+
+                <!-- Pricing Section -->
+		<!-- End Pricing Section -->
+
+                <!-- CurveDown -->
+                <!-- <svg class="curveDownColor " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                    <path d="M0 0 C 50 100 80 100 100 0 Z "></path>
+                </svg> -->
+
+                <!-- Parallax Section - Counter -->
+                 <!-- End Parallax Section -->
+
+                <!-- CurveUp -->
+                <!-- <svg class="curveUpColor curveGrey " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                    <path d="M0 100 C 20 0 50 0 100 100 Z "></path>
+                </svg> -->
+
+                <!-- Team Section -->
+                
+                <!-- End Team Section -->
+
+                <!-- CurveUp -->
+                <!-- <svg class="curveUpColor " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                    <path d="M0 100 C 20 0 50 0 100 100 Z "></path>
+                </svg> -->
+
+                <!-- Clients Logos Section -->
+                 <!-- End Clients Logos Section -->
+
+                <!-- CurveDown -->
+                <!-- <svg class="curveDownColor curveMapUp " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                    <path d="M0 0 C 50 100 80 100 100 0 Z "></path>
+                </svg> -->
+
+                <!-- Parallax Section -->
+               
+                <!-- End Parallax Section -->
+
+                <!-- CurveUp -->
+                <!-- <svg class="curveUpColor curveMapDown " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                    <path d="M0 100 C 20 0 50 0 100 100 Z "></path>
+                </svg> -->
+
+                <!-- Contact Section -->
+                <div class="wrap contact " id="contact">
+                    <div class="grid grid-pad ">
+                        <h2>Contact</h2>
+                        <div class="col-1-2 ">
+                            <div class="content address ">
+                                <h3>Talk to us</h3>
+                                <p>Team Cellular Automata India
+                                </p>
+                                <address>
+                                    <div>
+                                        <div class="box-icon ">
+                                            <i class="icon-location "></i>
+                                        </div>
+                                        <span>Address:</span>
+                                        <p>India</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="box-icon ">
+                                            <i class="icon-clock "></i>
+                                        </div>
+                                        <span>Working Time:</span>
+                                        <p>Sunday - Saturday</p> (24X7)</p>
+                                    </div>
+                                    
+                                    <!-- <div>
+                                        <div class="box-icon ">
+                                            <i class="icon-phone "></i>
+                                        </div>
+                                        <span>Phone:</span>
+                                        <p>9073188349</p>
+                                    </div>                                   -->
+                                </address>
+                            </div>
+                        </div>
+                        <div class="col-1-2 pleft-25 ">
+                            <div class="content contact-form ">
+                                <form class="form " action="mailto:cellularautomataindia@gmail.com " method="post " enctype="text/plain ">
+                                    <input type="text " class="comment-name " placeholder="Name* " name="name " required>
+                                    <input type=" email " class="comment-email " placeholder="Email* " name="email " required>
+                                    <input type="text " class="comment-subject " placeholder="Subject " name="subject ">
+                                    <textarea class="required comment-text " placeholder="Message... " name="Message " required></textarea>
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 ">
+                                        <button class="send_btn btn submit comment-submit " style="color: white; text-align: center;background-color: rgb(255, 80, 197); ">Send Message</button>
+                                    </div>
+                                    <!-- <input type="submit " value="Send Message " style="color: white; text-align: center;background-color: rgb(255, 80, 197); " class=" btn submit comment-submit "> -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Contact Section -->
+
+                <!-- CurveDown -->
+                <svg class="curveDownColor " xmlns="http://www.w3.org/2000/svg " version="1.1 " width="100% " height="100 " viewBox="0 0 100 100 " preserveAspectRatio="none ">
+                    <path d="M0 0 C 50 100 80 100 100 0 Z "></path>
+                </svg>
+
+                <!-- Footer -->
+                <footer class="wrap ">
+                    <div class="grid grid-pad ">
+                        <div class="col-1-4 ">
+                            <div class="content ">
+                                <div class="footer-widget ">
+                                    <h3>About</h3>
+                                    <div class="textwidget ">
+                                        <p>This webpage is created to post about Theory and Applications Cellular Automata (CAs), different Workshops, discourse of lecture series, associated webinars and academic talks, and to initiate and encourage further
+                                            discussions on them.</p><br>
+                                        <p>Please keep visiting us</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1-4 ">
+                            <div class="content ">
+                                <div class="footer-widget ">
+                                    <h3>Recent Posts</h3>
+                                    <div class="fwidget ">
+                                        <ul>
+                                            <li><a href="#webiner ">Cellular Automata Workshop</a></li>
+                                            <li><a href="#ascat2022 ">First Asian Symposium on Cellular Automata Technology (ASCAT 2022)</a></li>
+                                            <li><a href="#SummerSchool ">Summer School</a></li>
+                                            <li><a href="#UpcomingEvents ">Upcoming Events</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1-4 ">
+                            <div class="content ">
+                                <div class="footer-widget ">
+                                    <h3>More info</h3>
+                                    <div class="textwidget ">
+                                        <p>Want to know more about Cellular Automata ?</p><br>
+                                        <p>Check the website frequently. </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1-4 ">
+                            <div class="content ">
+                                <div class="footer-widget ">
+                                    <h3>Flickr Feed</h3>
+                                    <div class="flickr-widget ">
+                                        <ul class="flickr-list ">
+                                            <li>
+                                                <a href="#blog"><img src=" images/post/post-n1.jpg " alt=" "></a>
+                                            </li>
+                                            <li>
+                                                <a href="#blog"><img src="images/post/post-n2.jpg " alt=" "></a>
+                                            </li>
+                                            <li>
+                                                <a href="#blog"><img src="images/post/post-n3.jpg " alt=" "></a>
+                                            </li>
+                                            <li>
+                                                <a href="#blog "><img src="images/post/post-n4.png " alt=" "></a>
+                                            </li>
+                                            <!-- <li>
+                                                <a href="#0 "><img src="images/flickr-widget/flickr5.jpg " alt=" "></a>
+                                            </li>
+                                            <li>
+                                                <a href="#0 "><img src="images/flickr-widget/flickr6.jpg " alt=" "></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-footer ">
+                        <div class="grid grid-pad ">
+                            <div class="col-1-1 ">
+                                <div class="content ">
+                                    <div class="social-set ">
+                                        <a href="#0 "><i class="icon-facebook "></i></a>
+                                        <a href="#0 "><i class="icon-twitter "></i></a> .
+                                        <a href="#0 "><i class="icon-linkedin2 "></i></a>
+                                        <a href="#0 "><i class="icon-dribbble4 "></i></a>
+                                        <a href="#0 "><i class="icon-instagram "></i></a>
+                                    </div>
+                                    <p class="source-org copyright ">© 2022 | Designed By <a href="https://www.cellularautomata.in/">Cellular Automata India</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- End Footer -->
+
+                <div class="loader-overlay ">
+                    <div class="loader ">
+                        <div class="bar "></div>
+                        <div class="bar "></div>
+                        <div class="bar "></div>
+                        <div class="bar "></div>
+                        <div class="bar "></div>
+                    </div>
+                </div>
+
+                <!-- JS -->
+                <script src="js/jquery.js "></script>
+                <script src="js/main.js "></script>
+                <script src="js/mixitup.js "></script>
+                <script src="js/smoothscroll.js "></script>
+                <script src="js/jquery.nav.js "></script>
+                <script src="js/owl-carousel/owl.carousel.min.js "></script>
+                <script src="https://maps.googleapis.com/maps/api/js "></script>
+                <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js "></script>
+                <script src="js/jquery.counterup.min.js "></script>
+                <script src="js/lightcase.min.js "></script>
+                <script src="js/iframeResizer.min.js "></script>
+                <script src="js/iframeResizer.contentWindow.min.js "></script>
+                <script>
+                    iFrameResize({
+                        log: true
+                    }, '#indexIframe1')
+                </script>
+                <!-- <script>
+                iFrameResize({
+                    log: true
+                }, '#myIframe2')
+            </script> -->
 
 </body>
 
