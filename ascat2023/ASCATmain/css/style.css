@@ -448,10 +448,10 @@
 }
 
 .def {
-    margin-left: 80px;
-    padding-left: 80px;
-    margin-right: 80px;
-    padding-right: 80px;
+    margin-left: 3%;
+    padding-left: 3%;
+    margin-right: 3%;
+    padding-right: 3%;
 }
 .hover13 figure:hover img {
     opacity: 1;
