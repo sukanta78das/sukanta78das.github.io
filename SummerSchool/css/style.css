@@ -691,3 +691,8 @@ form .button input:hover {
         flex-direction: column;
     }
 }
+
+.latex{
+    font-family: "Computer Modern Serif", serif;
+    font-size: 0.7em;
+}
