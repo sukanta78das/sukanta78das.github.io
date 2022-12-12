@@ -476,3 +476,9 @@
         opacity: 1;
     }
 }
+
+.latex{
+    font-family: "Computer Modern Serif", serif;
+    font-size: 1 em;
+}
+
