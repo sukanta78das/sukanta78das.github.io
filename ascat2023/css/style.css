@@ -859,3 +859,24 @@ p {
   .pushable1:active .front1 {
     transform: translateY(-2px);
   }
+.warning {
+    /*border: 10px solid rgba(255, 255, 255, 0.13);
+    padding: 0.5rem;*/
+    background-color:transparent;
+    
+}
+.warning img {
+    width: 50%;
+    float: left;
+}
+.zoom {
+    transition: transform .2s; /* Animation */
+  }
+.zoom:hover {
+    transform: scale(1.15); }
+
+
+.warning p {
+    font: small-caps bold 1.5rem sans-serif;
+    text-align: center;
+}
