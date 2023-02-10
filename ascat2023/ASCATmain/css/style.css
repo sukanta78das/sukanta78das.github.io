@@ -745,4 +745,52 @@
   
     box-shadow: 0 0 0 2px var(--colorShadeB), 0 0.25em 0 0 var(--colorShadeB);
   }
+
+ /*--------------------------------------------------------------
+# download button sections
+--------------------------------------------------------------*/
+
+  .pushable3 {
+    background: hsl(340deg 100% 32%);
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+  }
+  .front3 {
+    display: block;
+    padding: 10px 40px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    background: hsl(345deg 100% 47%);
+    color: white;
+    transform: translateY(-6px);
+  }
+
+  .pushable3:active .front3 {
+    transform: translateY(-2px);
+  }
+
+  .pushable1 {
+    background: hsl(340deg 100% 32%);
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+  }
+  .front1 {
+    display: block;
+    padding: 12px 42px;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: hsl(345deg 100% 47%);
+    color: white;
+    transform: translateY(-6px);
+  }
+
+  .pushable1:active .front1 {
+    transform: translateY(-2px);
+  }
   
