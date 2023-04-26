@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Summer School on Cellular Automata Technology 2023</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Navbar & Hero Start -->
+        <div class="container-xxl position-relative p-0">
+            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+                <a href="" class="navbar-brand p-0">
+                    <h1 class="m-0"><i class="fa fa-graduation-cap me-2"></i>Summer School<span class="fs-5"> 2023</span></h1>
+                    <!-- <img src="img/logo.png" alt="Logo"> -->
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto py-0">
+                        <a href="index.html" class="nav-item nav-link ">Home</a>
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="service.html" class="nav-item nav-link">Project</a>
+                        <a href="team.html" class="nav-item nav-link">Supervisors</a>
+                        <a href="project.html" class="nav-item nav-link active">Previous Work</a>
+                        <!-- <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="team.html" class="dropdown-item">Supervisors</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="404.html" class="dropdown-item">404 Page</a>
+                            </div>
+                        </div> -->
+                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    </div>
+                    <butaton type="button" onclick="window.location.href='https://www.cellularautomata.in/SummerSchool/index.html';" class="btn text-secondary ms-3" ><i class="fa fa-building"></i></butaton>
+                    <!-- <butaton type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-building"></i></butaton> -->
+                    <a href="https://forms.gle/7GprKpaYombhJRQD7" target="_blank" class="btn btn-secondary text-light rounded-pill py-2 px-4 ms-3">Registration</a>
+                </div>
+            </nav>
+
+            <div class="container-xxl py-5 bg-primary hero-header mb-5">
+                <div class="container my-5 py-5 px-lg-5">
+                    <div class="row g-5 py-5">
+                        <div class="col-12 text-center">
+                            <h1 class="text-white animated zoomIn">Previous Work</h1>
+                            <hr class="bg-white mx-auto mt-0" style="width: 90px;">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb justify-content-center">
+                                    <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                                    <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                                    <li class="breadcrumb-item text-white active" aria-current="page">Previous Work</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar & Hero End -->
+
+
+        <!-- Full Screen Search Start -->
+        <div class="modal fade" id="searchModal" tabindex="-1">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content" style="background: rgba(29, 29, 39, 0.7);">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex align-items-center justify-content-center">
+                        <div class="input-group" style="max-width: 600px;">
+                            <input type="text" class="form-control bg-transparent border-light p-3" placeholder="Type search keyword">
+                            <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Full Screen Search End -->
+
+
+         <!-- Previous Projects Start -->
+         <div class="container-xxl py-5">
+            <div class="container px-lg-5">
+                <div class="section-title position-relative text-center mb-5 pb-2 wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="position-relative d-inline text-primary ps-4">Previous Projects</h6>
+                    <h2 class="mt-2">Completed Projects in previous Summer Schools (Published Papers)</h2>
+                </div>
+                <div class="row mt-n2 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="col-12 text-center">
+                        <ul class="list-inline mb-5" id="portfolio-flters">
+                            <li class="btn px-3 pe-4 active" data-filter="*">All</li>
+                            <li class="btn px-3 pe-4" data-filter=".first">Summer School 2021</li>
+                            <li class="btn px-3 pe-4" data-filter=".second">Summer School 2022</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row g-4 portfolio-container">
+                    <div class="col-lg-4 col-md-6 portfolio-item first wow zoomIn" data-wow-delay="0.1s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>
+                                    Defining Reachability Tree under Adiabatic and Reflexive Boundary Condition Cellular Automata
+                                </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                Nazma Naskar and B K Sivaraj <br></span><br>
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; In this paper the elementary cellular automata is explored under adiabatic boundary condition and reflexive boundary condition, using the reachability tree. To construct the reachability
+                                tree under the mentioned conditions, structures of those boundary conditions are analysed. The valid RMTs of root level and leaf level are identified. It was found that only at root level and leaf level, the structures
+                                and arrangements differ slightly with the reachability tree of null boundary condition.</p>
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-1.jpg" alt="">
+                            <h5 class="mb-3">Defining Reachability Tree under Adiabatic and Reflexive Boundary Condition Cellular Automata</h5>
+                            <p>Nazma Naskar and B K Sivaraj</p> -->
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://link.springer.com/chapter/10.1007/978-981-19-0542-1_9" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class=" text-white"><i class="fa fa-folder me-2"></i>Defining Reachability Tree under Adiabatic and Reflexive Boundary Condition Cellular Automata </small>
+                                    <a class="d-block text-white mt-1 mb-0" href="">Nazma Naskar and B K Sivaraj</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item second wow zoomIn" data-wow-delay="0.6s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-3.jpg" alt=""> -->
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>Information-Theoretic Analysis
+                                    of ECA Rules
+                                    (Genealogy Interceded Phenotypic Analysis (GIPA) of ECA rules)
+                                </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                R Goyal<br></span><br>
+                                <!-- Bejaia University  -->
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; This project demonstrated the grouping of the ECA Rules using information theoretic measures in light of Wolfram's classification of ECA, with 88 rule equivalence classes. This study used
+                                the concept of BiEntropy to compute the approximate information content of a binary string while quantifying the evolution of the macroscopic behavior in space-time diagrams for different rules. The amount of information
+                                processed by a CA rule in a space-time patch was captured through four proposed measures, i.e., DiffEntropy (DE), SimConfig Ordered (SCO), SimConfigImmediate (SCI), and SimConfigFluctuation (SCF). Based on the information-theoretic
+                                analysis, which was followed by the clustering of entropy values of different configurations through dynamic time warping (DTW), a Genealogy Interceded Phenotypic Analysis (GIPA) of 88 ECA rules was proposed.
+                            </p>
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://youtu.be/wI03Z6c8hlA" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Information-Theoretic Analysis
+                                        of ECA Rules
+                                        (Genealogy Interceded Phenotypic Analysis (GIPA) of ECA rules)</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href=""> R Goyal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 portfolio-item first wow zoomIn" data-wow-delay="0.3s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>
+                                Cellular-automata based simulation of dynamic recrystallization and statistical analysis of resulting grain growth
+                            </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                Subramanian R S, Sai Shree Ramadev and Prince Gideon Kubendran Amos<br></span>
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; By employing cellular automata technique, in this work, a polycrystalline system corroborating experimentally observed microstructure is developed. Moreover, through appropriate transition
+                                functions, microstructural changes accompanying dynamic recrystallization, a manufacturing technique associated with the production of wide-range of components, is simulated. The grain growth that characterises this change
+                                is analysed to explicate the trend in the temporal evolution of mean grain size and its kinetics. As opposed to a progressive increase in mean grain size, which generally typifies a conventional grain growth, in dynamic
+                                recrystallization, it is observed that the mean grain size increases and decreases sequentially, thereby rendering a oscillating pattern. A perceptive investigation of the fluctuating trend unravels individual growth events,
+                                characterised by monotonic increase in mean grain size, whose kinetics follow the third-order power law.</p>
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-1.jpg" alt="">
+                        <h5 class="mb-3">Defining Reachability Tree under Adiabatic and Reflexive Boundary Condition Cellular Automata</h5>
+                        <p>Nazma Naskar and B K Sivaraj</p> -->
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-2.jpg" alt="">   data-lightbox="portfolio" -->
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://link.springer.com/chapter/10.1007/978-981-19-0542-1_12" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Cellular-automata based simulation of dynamic recrystallization and statistical analysis of resulting grain growth</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href="">Subramanian R S, Sai Shree Ramadev and Prince Gideon Kubendran Amos</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 portfolio-item second wow zoomIn" data-wow-delay="0.1s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-4.jpg" alt=""> -->
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>Cellular Automata as models in
+                                    Social Sciences</span>
+                                </b><br><span class="latex" style="font-size: 1.2em;">
+                                Rezki Chemlal<br></span><br>
+                                <!-- <br> Rezki Chemlal<br>
+                                    Bejaia University -->
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; In this project we were interested in the use of 2 dimension cellular automata in social sciences , we were very flexible in the last point as we also inculed models in urban modeling.We
+                                also did not restict ourselevs to the formal definition of cellular automata as we considered also interesting models that may be considered close to cellular automata. We realised programs for all models.
+
+                            </p>
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://youtu.be/wI03Z6c8hlA" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Cellular Automata as models in
+                                        Social Sciences</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href="">Rezki Chemlal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 portfolio-item second wow zoomIn" data-wow-delay="0.3s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-5.jpg" alt="">
+                                -->
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>Modeling the Spread of Covid-19
+                                    with 2-D Cellular Automata
+                                </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                Subrata Paul<br>Mentor: Kamalika Bhattacharjee</span><br>
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; This project focuses on developing a model that can accurately simulate COVID-19's global dissemination patterns. We utilize cellular automaton (CA) to build such a model. In this project,
+                                a new variant of CA called Temporary Stochastic Cellular Automata (TSCA) is used, where two rules is being utilized, one of which serves as a default rule and the other of which is a probabilistic rule that is applied with
+                                some probability. To consider the mutation of the COVID-19 rule, we employ a set of TSCAs. Each TSCA is considered as (f, g)[τ] and at a time the applied TSCA is chosen from the set. The model evolves using two TSCA rules
+                                f and g, where f is represented as the propagation of the virus, g is represented as recovery function and g is applied with probability τ . The model is validated on the basis of a real-time dataset of spreading Coronavirus
+                                (SARS-COVID-19) over the world. This proposed model depicts the spreading scenario of the novel Coronavirus which has caused a global pandemic.
+
+                            </p>
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://youtu.be/wI03Z6c8hlA" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Modeling the Spread of Covid-19
+                                        with 2-D Cellular Automata</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href="">Subrata Paul and Kamalika Bhattacharjee</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 portfolio-item second wow zoomIn" data-wow-delay="0.6s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-6.jpg" alt=""> -->
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>
+                                    Isomorphism In Cellular Automata
+
+                                </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                Vicky Vikrant
+                                <br>Mentor: Sukanya Mukherjee</span><br>
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; This work focuses on the isomorphism of cellular automata (CAs). Two cellular automata are said to be isomorphic if their configurations evolve in the similar way. As a model, here we use
+                                non-uniform elementary cellular automata under null boundary and discover few inherent properties of CAs to decide whether the given cellular automata are isomorphic.
+                            </p>
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://youtu.be/wI03Z6c8hlA" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Isomorphism In Cellular Automata</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href="">Vicky Vikrant and Sukanya Mukherjee</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 portfolio-item second wow zoomIn" data-wow-delay="0.6s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <!-- <img class="img-fluid w-100" src="img/portfolio-6.jpg" alt=""> -->
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>
+                                    Hexagonal Cellular Automata Simulation of Intergranular
+                                    Cracking in Polycrystalline Materials
+                                </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                Tarun Kumaar M K, Deeraj H, and Suvetha M
+                                <br>Mentor: Prince Gideon Kubendran Amos</span><br>
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; The model takes an input of the desired number of nuclei, which are then distributed at random throughout the domain. For this system, we are considering 18 different grain orientations
+                                associated with their own unique colours. Conventionally, cellular automata are associated with square discretization but here we have implemented hexagonal discretization and attempt to undertake a qualitative
+                                comparison between them.
+
+                            </p>
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="https://youtu.be/wI03Z6c8hlA" target="_blank"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Hexagonal Cellular Automata Simulation of Intergranular
+                                        Cracking in Polycrystalline Materials</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href="">Tarun Kumaar M K, Deeraj H, and Suvetha M and Prince Gideon Kubendran Amos </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-6 portfolio-item second wow zoomIn" data-wow-delay="0.1s">
+                        <div class="position-relative rounded overflow-hidden">
+                            <p class="latex" style="text-align: justify; text-justify: inter-word;">
+                                <span class="latex" style="font-size: 1.4em;"><b>
+                                    Isomorphism In Cellular Automata
+
+                                </b></span><br><span class="latex" style="font-size: 1.2em;">
+                                Vicky Vikrant
+                                <br>Mentor: Sukanya Mukherjee</span><br>
+                                <br> <b>Abstract.</b>&nbsp;&nbsp; This work focuses on the isomorphism of cellular automata (CAs). Two cellular automata are said to be isomorphic if their configurations evolve in the similar way. As a model, here
+                                we use non-uniform elementary cellular automata under null boundary and discover few inherent properties of CAs to decide whether the given cellular automata are isomorphic.
+                            </p>
+                            <div class="portfolio-overlay">
+                                <a class="btn btn-light" href="img/portfolio-6.jpg" data-lightbox="portfolio"><i class="fa fa-plus fa-2x text-primary"></i></a>
+                                <div class="mt-auto">
+                                    <small class="text-white"><i class="fa fa-folder me-2"></i>Isomorphism In Cellular Automata</small>
+                                    <a class="h5 d-block text-white mt-1 mb-0" href="">Vicky Vikrant</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <!-- Previous Projects  End -->
+        
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-primary text-light footer mt-5 pt-5 wow" data-wow-delay="0.1s">
+            <div class="container py-5 px-lg-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-3 ">
+                            <iframe src="subrata.html" width="100%" height="350px"></iframe>  
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">Popular Link</h5>
+                        <a class="btn btn-link" href="about.html">About Us</a>
+                        <a class="btn btn-link" href="contact.html">Contact Us</a>
+                        <a class="btn btn-link" href="">Privacy Policy</a>
+                        <a class="btn btn-link" href="">Terms & Condition</a>
+                        <a class="btn btn-link" href="">Career</a>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">Our Supervisors</h5>
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <img class="img-fluid" src="img/tch1.jpg" alt="Image">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid" src="img/tch2.jpg" alt="Image">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid" src="img/tch3.jpg" alt="Image">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid" src="img/tch4.jpg" alt="Image">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid" src="img/tch5.jpg" alt="Image">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid" src="img/tch6.jpg" alt="Image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">Newsletter</h5>
+                        <p>Feel free to contact us</p>
+                        <div class="position-relative w-100 mt-3">
+                            <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="Your Email" style="height: 48px;">
+                            <button type="button" onclick="window.location.href='mailto: subratapaul.sp.sp@gmail.com';" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
+                        </div>
+                        <!-- <h5 class="text-white mb-4">Get In Touch</h5> -->
+                        <br>
+                        <p><i class="fa fa-envelope me-3"></i><small>cellularautomataindia@gmail.com</small></p>
+                        <p><i class="fa fa-map-marker-alt me-3"></i>India</p>
+                        <!-- <p><i class="fa fa-phone-alt me-3"></i>+000 000 00000</p> -->
+                       
+                        <!-- <div class="d-flex pt-2">
+                            <a class="btn btn-square text-primary bg-white my-1" href=""><i class="fa fa-id-badge"></i></a>
+                            <a class="btn btn-square text-primary bg-white my-1" href=""><i class="fab fa-researchgate"></i></a>
+                            <a class="btn btn-square text-primary bg-white my-1" href=""><i class="fab fa-github"></i></a>
+                            <a class="btn btn-square text-primary bg-white my-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="container px-lg-5">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">Summer School on Cellular Automata technology 2023</a>,
+
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a class="border-bottom" href="https://www.cellularautomata.in">Cellular Automata India</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="#">Home</a>
+                                <a href="#">Cookies</a>
+                                <a href="#">Help</a>
+                                <a href="#">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
