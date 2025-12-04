@@ -278,37 +278,37 @@ function drawGrid(ctx, grid, cellSize){
     drawGrid(ctx, grid, cellSize);
     if(step>=steps) { running=false; clearInterval(timer); }
   }
-  startBtn.addEventListener('click', ()=>{
-
-    // CASE 1 — If grid exists AND nothing changed → resume
-    if (grid && !running) {
-        running = true;
-        const fps = 12;
-        timer = setInterval(()=>{ tick(); }, 1000/fps);
-        return;
-    }
-
-    // CASE 2 — Restart ONLY when:
-    // - First time
-    // - Or user changed n, steps, rule, config, cellSize
-    clearInterval(timer);
-    running = false;
-    prepare();     // rebuild everything
-    running = true;
-
-    const fps = 12;
-    timer = setInterval(()=>{ tick(); }, 1000/fps);
-});
-
 //   startBtn.addEventListener('click', ()=>{
+
+//     // CASE 1 — If grid exists AND nothing changed → resume
+//     if (grid && !running) {
+//         running = true;
+//         const fps = 12;
+//         timer = setInterval(()=>{ tick(); }, 1000/fps);
+//         return;
+//     }
+
+//     // CASE 2 — Restart ONLY when:
+//     // - First time
+//     // - Or user changed n, steps, rule, config, cellSize
 //     clearInterval(timer);
 //     running = false;
-//     prepare();   // <-- always rebuild grid & canvas
-
+//     prepare();     // rebuild everything
 //     running = true;
+
 //     const fps = 12;
 //     timer = setInterval(()=>{ tick(); }, 1000/fps);
-//     });
+// });
+
+  startBtn.addEventListener('click', ()=>{
+    clearInterval(timer);
+    running = false;
+    prepare();   // <-- always rebuild grid & canvas
+
+    running = true;
+    const fps = 12;
+    timer = setInterval(()=>{ tick(); }, 1000/fps);
+    });
 
     pauseBtn.addEventListener('click', ()=>{
     if(running){
@@ -340,3 +340,4 @@ function drawGrid(ctx, grid, cellSize){
   </script>
 </body>
 </html>
+// Subrata simulator
