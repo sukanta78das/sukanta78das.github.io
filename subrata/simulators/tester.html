@@ -3,44 +3,69 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>XCA Browser Simulator</title>
+  <title>XCA Browser Simulator — enhanced</title>
   <style>
-    body { font-family: system-ui, -apple-system, Roboto, "Segoe UI", Arial; padding: 16px; background:#f3f7fb; color:#0b2540 }
-    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px }
-    label { font-size:13px }
+    :root{
+      --bg-light:#f3f7fb; --text-light:#0b2540;
+      --alive-light:#001133; --dead-light:#e8f8ff;
+      --bg-dark:#111b29; --text-dark:#dbeafe;
+      --alive-dark:#66e0ff; --dead-dark:#0b1220;
+      --control-bg: #ffffffaa;
+    }
+    body { font-family: system-ui, -apple-system, Roboto, "Segoe UI", Arial; padding: 16px; margin:0; background:var(--page-bg); color:var(--page-text); transition:background .18s,color .18s}
+    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; padding:8px; background:var(--control-bg); border-radius:8px }
+    label { font-size:13px; display:flex; align-items:center; gap:6px }
     input[type=number], input[type=text], select { padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1 }
     button { padding:8px 10px; border-radius:8px; border: none; background:#0066cc; color:white; cursor:pointer }
     button.secondary{ background:#4b5563 }
-    canvas { border:1px solid #cbd5e1; image-rendering: pixelated }
+    button.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.08); color:inherit }
+    .tog { display:inline-flex; gap:6px; align-items:center }
+    canvas { border:1px solid #cbd5e1; image-rendering: pixelated; display:block; margin-top:12px; }
     .small { font-size:12px }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:8px }
+    /* light/dark theme vars */
+    .theme-light { --page-bg:var(--bg-light); --page-text:var(--text-light); --alive:var(--alive-light); --dead:var(--dead-light); --control-bg:#ffffffaa; }
+    .theme-dark  { --page-bg:var(--bg-dark); --page-text:var(--text-dark); --alive:var(--alive-dark); --dead:var(--dead-dark); --control-bg:#00000055; }
+    .small-muted { font-size:12px; opacity:0.8 }
   </style>
 </head>
-<body>
-  <h2>Homo-asynchronous</h2>
-  <div class="controls">
+<body class="theme-light">
+  <div class="topbar">
+    <h2 style="margin:0">Homo-asynchronous — XCA simulator</h2>
+    <div class="small-muted">Theme: <span id="themeLabel">Light</span></div>
+  </div>
+
+  <div class="controls" id="controls">
     <label>cells n: <input id="nInput" type="number" value="30" min="3" max="500"></label>
     <label>rule (0-255): <input id="ruleInput" type="number" value="60" min="0" max="255"></label>
-    <label>steps: <input id="stepsInput" type="number" value="100" min="1" max="1000"></label>
-    <label>cell size px: <input id="cellSizeInput" type="number" value="8" min="2" max="32"></label>
-    <label>seed config (optional binary string): <input id="cfgInput" type="text" placeholder="e.g. 0010101"></label>
-    <button id="startBtn">Start</button>
-    <button id="pauseBtn" class="secondary">Pause</button>
-    <button id="stepBtn" class="secondary">Step</button>
-    <button id="downloadBtn">Download</button>
-    <!-- <div style="margin-left:8px" class="small">Colors: alive=navy, background=lightcyan</div> -->
+    <label>steps: <input id="stepsInput" type="number" value="100" min="1" max="2000"></label>
+    <label>cell size px: <input id="cellSizeInput" type="number" value="8" min="2" max="64"></label>
+    <label style="min-width:240px">seed config (optional): <input id="cfgInput" type="text" placeholder="e.g. 0010101" style="width:220px"></label>
+
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button id="startBtn">Start / Resume</button>
+      <button id="pauseBtn" class="secondary">Pause</button>
+      <button id="stepBtn" class="secondary">Step</button>
+      <button id="resetLastBtn" class="ghost">Reset → Last Run</button>
+      <button id="resetBtn" class="secondary">Reset (defaults)</button>
+      <button id="hardResetBtn" class="secondary">Hard Reset</button>
+      <button id="downloadBtn">Download PNG</button>
+    </div>
+
+    <div style="margin-left:8px; display:flex; gap:8px; align-items:center;">
+      <label class="tog"><input id="fastMode" type="checkbox"> Faster (offscreen)</label>
+      <label class="tog"><input id="autoSave" type="checkbox" checked> Auto-save on Start</label>
+      <label class="tog"><input id="themeToggle" type="checkbox"> Dark</label>
+    </div>
   </div>
 
   <canvas id="canvas"></canvas>
 
 <script>
-
-
-function intArrayFromString(s){ const a = new Uint8Array(s.length); for(let i=0;i<s.length;i++) a[i]= (s.charAt(i)==='1')?1:0; return a }
-
+// ---------------------- Core simulator logic (ported) ----------------------
 function PutStar(n, conf){
   if(n<4) return {shift:-1, hconf:""};
   let shift=0;
-  // conf is a plain array-like of 0/1
   while(true){
     let flag=false;
     const val = 2*conf[n-1] + conf[0];
@@ -70,9 +95,7 @@ function PutStar(n, conf){
     } else {
       throw new Error("unexpected Error in PutStar");
     }
-
     if(flag){
-      // rotate left by 1
       shift += 1;
       const ch = conf[0];
       for(let i=0;i<n-1;i++) conf[i] = conf[i+1];
@@ -84,13 +107,12 @@ function PutStar(n, conf){
 }
 
 function NormalForm(n, confIn){
-  // make a copy of conf as mutable array
   const conf = Array.from(confIn);
   const NF = [];
   let countStar = 0;
   while(true){
     let length = 0;
-    NF.push(0); // placeholder for shift
+    NF.push(0);
     if(n==1){
       NF.push(conf[0]);
     } else if(n==2){
@@ -103,7 +125,6 @@ function NormalForm(n, confIn){
     } else if(n==3){
       if(conf[0]==conf[1] && conf[1]==conf[2]){
         NF.push(conf[0]); NF.push('*');
-        // keep conf same (C code had some moves)
         countStar += 1;
         length = 1;
       } else {
@@ -124,7 +145,6 @@ function NormalForm(n, confIn){
         NF.push('*');
         countStar += 1;
         length = hconf.length;
-        // shift conf left by length
         for(let j=length;j<n;j++) conf[j-length] = conf[j];
       }
     } else {
@@ -137,7 +157,6 @@ function NormalForm(n, confIn){
       length = hconf.length;
       for(let j=length;j<n;j++) conf[j-length] = conf[j];
     }
-
     if(length==0) break;
     n = n - length;
   }
@@ -145,14 +164,11 @@ function NormalForm(n, confIn){
 }
 
 function updateConfig(conf, n, Rule){
-  // conf is an array of length n (0/1). This mutates and returns it.
   const nf_res = NormalForm(n, conf.slice());
   const countStar = nf_res.countStar;
   const NF = nf_res.NF;
   const ksel = Math.floor(Math.random()*(countStar+1));
   const m = n + 2*countStar + 1;
-
-  // find ksel-th star position (first pass finds index i at star?)
   let i=0, jcount=0;
   while(jcount<ksel){ if(NF[i]=='*') jcount++; i++; }
   i=0; jcount=0;
@@ -161,14 +177,12 @@ function updateConfig(conf, n, Rule){
   const hconf = [];
   while(j < m && NF[j] !== '*'){ hconf.push(NF[j]); j++; }
   const length = hconf.length;
-
   for(let idx=0; idx<length; idx++){
     const left = (idx==0)? hconf[length-1] : hconf[idx-1];
     const right = (idx==length-1)? hconf[0] : hconf[idx+1];
     const newbit = Rule[4*left + 2*hconf[idx] + right];
     NF[i+1+idx] = newbit;
   }
-
   const t_conf = new Array(n).fill(0);
   j = m-1;
   let i_conf = n-1;
@@ -179,7 +193,6 @@ function updateConfig(conf, n, Rule){
     } else {
       const shift = NF[j];
       const lengthTail = n - i_conf - 1;
-      // copy tail
       for(let kidx=i_conf+1;kidx<n;kidx++) t_conf[kidx-(i_conf+1)] = conf[kidx];
       for(let kidx=i_conf+1;kidx<n;kidx++){
         conf[kidx] = t_conf[(kidx-(i_conf+1) + shift) % lengthTail];
@@ -187,46 +200,31 @@ function updateConfig(conf, n, Rule){
       j -= 2;
     }
   }
-  // final piece when j==0
   const shift = NF[j];
   const lengthTail = n - i_conf - 1;
   for(let kidx=i_conf+1;kidx<n;kidx++) t_conf[kidx-(i_conf+1)] = conf[kidx];
   for(let kidx=i_conf+1;kidx<n;kidx++){
     conf[kidx] = t_conf[(kidx-(i_conf+1) + shift) % lengthTail];
   }
-
   if(i_conf !== -1){ console.error("Unexpected error.H"); }
   return conf;
 }
 
 function update_XCA(grid, Rule, stepIndex){
-  // grid is a 2D array rows x cols; we compute next row from current row index stepIndex % rows
   const rows = grid.length, cols = grid[0].length;
   const cur = grid[stepIndex % rows];
   const nxt = grid[(stepIndex+1) % rows];
-  // update nxt in circular manner
   const newconf = updateConfig(cur.slice(), cols, Rule);
   for(let c=0;c<cols;c++) nxt[c] = newconf[c];
   return nxt;
 }
 
-// Utility to build Rule bits array LSB first
 function ruleBitsFromNumber(k){ const Rule=[]; let kk=k; for(let i=0;i<8;i++){ Rule.push(kk&1); kk >>=1; } return Rule }
 
-// draw entire grid on canvas
-function drawGrid(ctx, grid, cellSize){
-  const rows = grid.length, cols = grid[0].length;
-  ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
-  for(let r=0;r<rows;r++){
-    for(let c=0;c<cols;c++){
-      if(grid[r][c]==1) ctx.fillStyle = '#000066'; else ctx.fillStyle = '#ccffff';
-      ctx.fillRect(c*cellSize, r*cellSize, cellSize-1, cellSize-1);
-    }
-  }
-}
+// ---------------------- UI + runtime -----------------------------------
 
-// Main runner
 (function(){
+  // elements
   const nInput = document.getElementById('nInput');
   const ruleInput = document.getElementById('ruleInput');
   const stepsInput = document.getElementById('stepsInput');
@@ -235,112 +233,355 @@ function drawGrid(ctx, grid, cellSize){
   const startBtn = document.getElementById('startBtn');
   const pauseBtn = document.getElementById('pauseBtn');
   const stepBtn = document.getElementById('stepBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const resetLastBtn = document.getElementById('resetLastBtn');
+  const hardResetBtn = document.getElementById('hardResetBtn');
   const downloadBtn = document.getElementById('downloadBtn');
+  const fastModeCheckbox = document.getElementById('fastMode');
+  const autoSaveCheckbox = document.getElementById('autoSave');
+  const themeToggle = document.getElementById('themeToggle');
+  const themeLabel = document.getElementById('themeLabel');
   const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+  let offscreen = null; // OffscreenCanvas if used
+  let ctx = canvas.getContext('2d');
 
-  let grid = null; // 2D array rows x cols
+  // state
+  let grid = null;
   let running = false;
   let timer = null;
   let step = 0;
   let Rule = ruleBitsFromNumber(60);
+  let lastSettings = null; // stored last-start settings (object)
+  const DEFAULTS = { n:30, rule:60, steps:100, cellSize:8, cfg:"" };
+  // load saved settings (auto-load)
+  const STORAGE_KEY = 'xca_last_settings_v1';
+  const THEME_KEY = 'xca_theme_v1';
+  const FAST_KEY = 'xca_fast_v1';
 
-  function prepare(){
-    const n = parseInt(nInput.value,10);
-    const steps = parseInt(stepsInput.value,10);
-    const cellSize = parseInt(cellSizeInput.value,10);
-    canvas.width = n * cellSize;
-    canvas.height = (steps+1) * cellSize;
-    // create grid as array of rows
-    grid = new Array(steps+1);
-    for(let r=0;r<=steps;r++){
-      grid[r] = new Array(n).fill(0);
-    }
-    // initial conf
-    if(cfgInput.value.trim().length===n){
-      const arr = cfgInput.value.trim().split('').map(ch=> ch==='1'?1:0);
-      grid[0] = arr.slice();
-    } else {
-      for(let i=0;i<n;i++) grid[0][i] = (Math.random()<0.5)?0:1;
-      // reflect into the rest already zeros
-    }
-    step = 0;
-    Rule = ruleBitsFromNumber(parseInt(ruleInput.value,10) || 0);
-    drawGrid(ctx, grid, parseInt(cellSizeInput.value,10));
+  // set up theme from localStorage
+  function applyTheme(theme){
+    document.body.classList.remove('theme-light','theme-dark');
+    if(theme === 'dark'){ document.body.classList.add('theme-dark'); themeLabel.textContent='Dark'; themeToggle.checked=true; }
+    else { document.body.classList.add('theme-light'); themeLabel.textContent='Light'; themeToggle.checked=false; }
+  }
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(savedTheme);
+
+  // fast mode default from storage
+  const savedFast = localStorage.getItem(FAST_KEY);
+  if(savedFast === '1') fastModeCheckbox.checked = true;
+
+  // load last settings if present
+  function loadSavedSettingsToInputs(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    try{
+      const s = JSON.parse(raw);
+      nInput.value = s.n || DEFAULTS.n;
+      ruleInput.value = s.rule || DEFAULTS.rule;
+      stepsInput.value = s.steps || DEFAULTS.steps;
+      cellSizeInput.value = s.cellSize || DEFAULTS.cellSize;
+      cfgInput.value = s.cfg || "";
+      lastSettings = Object.assign({}, s);
+      return true;
+    }catch(e){ return false; }
+  }
+  loadSavedSettingsToInputs();
+
+  // drawing helpers use CSS vars for colors
+  function getColors(){
+    const alive = getComputedStyle(document.body).getPropertyValue('--alive').trim() || '#001133';
+    const dead = getComputedStyle(document.body).getPropertyValue('--dead').trim() || '#e8f8ff';
+    return {alive, dead};
   }
 
+  // draw grid to given 2d context (ctx may be offscreen or onscreen)
+  function drawGridToContext(_ctx, gridArr, cellSize){
+    const rows = gridArr.length, cols = gridArr[0].length;
+    const {alive, dead} = getColors();
+    _ctx.clearRect(0,0, _ctx.canvas.width, _ctx.canvas.height);
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        _ctx.fillStyle = (gridArr[r][c]==1) ? alive : dead;
+        _ctx.fillRect(c*cellSize, r*cellSize, cellSize-1, cellSize-1);
+      }
+    }
+  }
+
+  // prepare grid & canvas according to inputs (rebuild)
+  function prepareFromInputs(){
+    const n = Math.max(3, Math.min(500, parseInt(nInput.value,10)||DEFAULTS.n));
+    const steps = Math.max(1, Math.min(2000, parseInt(stepsInput.value,10)||DEFAULTS.steps));
+    const cellSize = Math.max(2, Math.min(64, parseInt(cellSizeInput.value,10)||DEFAULTS.cellSize));
+
+    // build canvas (onscreen) size and offscreen if chosen
+    canvas.width = n * cellSize;
+    canvas.height = (steps+1) * cellSize;
+
+    if(fastModeCheckbox.checked && typeof OffscreenCanvas !== 'undefined'){
+      try{
+        offscreen = new OffscreenCanvas(canvas.width, canvas.height);
+        ctx = offscreen.getContext('2d');
+      }catch(e){
+        offscreen = null;
+        ctx = canvas.getContext('2d');
+      }
+    } else {
+      offscreen = null;
+      ctx = canvas.getContext('2d');
+    }
+
+    // build grid (rows = steps+1)
+    grid = new Array(steps+1);
+    for(let r=0;r<=steps;r++) grid[r] = new Array(n).fill(0);
+
+    // initial configuration
+    const cfgText = (cfgInput.value || "").trim();
+    if(cfgText.length === n && /^[01]+$/.test(cfgText)){
+      grid[0] = cfgText.split('').map(ch => ch === '1' ? 1 : 0);
+    } else {
+      for(let i=0;i<n;i++) grid[0][i] = (Math.random() < 0.5) ? 0 : 1;
+    }
+
+    step = 0;
+    Rule = ruleBitsFromNumber(parseInt(ruleInput.value,10) || 0);
+    // draw initial frame to internal ctx, then if offscreen copy to onscreen
+    drawGridToContext(ctx, grid, cellSize);
+    if(offscreen && canvas.transferFromImageBitmap){
+      // try efficient transfer (some browsers)
+      const bm = offscreen.transferToImageBitmap();
+      const screenCtx = canvas.getContext('2d');
+      screenCtx.clearRect(0,0,canvas.width,canvas.height);
+      screenCtx.drawImage(bm,0,0);
+    } else if(offscreen){
+      // draw offscreen into onscreen
+      const screenCtx = canvas.getContext('2d');
+      screenCtx.clearRect(0,0,canvas.width,canvas.height);
+      screenCtx.drawImage(offscreen,0,0);
+    }
+  }
+
+  // rendering one tick and copy to onscreen if using offscreen
+  function renderCurrent(){
+    const cellSize = Math.max(2, Math.min(64, parseInt(cellSizeInput.value,10)||DEFAULTS.cellSize));
+    drawGridToContext(ctx, grid, cellSize);
+    if(offscreen){
+      // draw offscreen into onscreen
+      const screenCtx = canvas.getContext('2d');
+      screenCtx.clearRect(0,0,canvas.width,canvas.height);
+      screenCtx.drawImage(offscreen,0,0);
+    }
+  }
+
+  // ticking evolution
   function tick(){
+    if(!grid) return;
     const n = grid[0].length;
     const steps = grid.length-1;
     update_XCA(grid, Rule, step);
     step++;
-    const cellSize = parseInt(cellSizeInput.value,10);
-    drawGrid(ctx, grid, cellSize);
-    if(step>=steps) { running=false; clearInterval(timer); }
+    renderCurrent();
+    if(step>=steps){ running=false; clearInterval(timer); timer=null; }
   }
-//   startBtn.addEventListener('click', ()=>{
 
-//     // CASE 1 — If grid exists AND nothing changed → resume
-//     if (grid && !running) {
-//         running = true;
-//         const fps = 12;
-//         timer = setInterval(()=>{ tick(); }, 1000/fps);
-//         return;
-//     }
+  // utilities to save / load in localStorage
+  function saveSettingsToStorage(){
+    try{
+      const s = {
+        n: parseInt(nInput.value,10) || DEFAULTS.n,
+        rule: parseInt(ruleInput.value,10) || DEFAULTS.rule,
+        steps: parseInt(stepsInput.value,10) || DEFAULTS.steps,
+        cellSize: parseInt(cellSizeInput.value,10) || DEFAULTS.cellSize,
+        cfg: (cfgInput.value||"").trim()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+      lastSettings = Object.assign({}, s);
+    }catch(e){}
+  }
 
-//     // CASE 2 — Restart ONLY when:
-//     // - First time
-//     // - Or user changed n, steps, rule, config, cellSize
-//     clearInterval(timer);
-//     running = false;
-//     prepare();     // rebuild everything
-//     running = true;
+  function clearAllStorage(){
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(THEME_KEY);
+    localStorage.removeItem(FAST_KEY);
+    lastSettings = null;
+  }
 
-//     const fps = 12;
-//     timer = setInterval(()=>{ tick(); }, 1000/fps);
-// });
-
+  // event handlers ----------------------------------------------------------
+  // START: smart behavior:
+  // - If simulation exists and inputs did NOT change since last Start -> resume from current step
+  // - If inputs changed OR first time -> rebuild & start from beginning
   startBtn.addEventListener('click', ()=>{
-    clearInterval(timer);
-    running = false;
-    prepare();   // <-- always rebuild grid & canvas
+    // detect if inputs changed compared to lastSettings
+    const current = {
+      n: parseInt(nInput.value,10) || DEFAULTS.n,
+      rule: parseInt(ruleInput.value,10) || DEFAULTS.rule,
+      steps: parseInt(stepsInput.value,10) || DEFAULTS.steps,
+      cellSize: parseInt(cellSizeInput.value,10) || DEFAULTS.cellSize,
+      cfg: (cfgInput.value||"").trim()
+    };
+    const sameAsLast = lastSettings &&
+      lastSettings.n===current.n &&
+      lastSettings.rule===current.rule &&
+      lastSettings.steps===current.steps &&
+      lastSettings.cellSize===current.cellSize &&
+      lastSettings.cfg===current.cfg;
 
-    running = true;
-    const fps = 12;
-    timer = setInterval(()=>{ tick(); }, 1000/fps);
-    });
-
-    pauseBtn.addEventListener('click', ()=>{
-    if(running){
-        running = false;
-        clearInterval(timer);
-    } else {
-        running = true;
-        const fps=12;
-        timer=setInterval(()=>{ tick(); }, 1000/fps);
+    if(grid && !running && sameAsLast){
+      // resume
+      running = true;
+      const fps = 12;
+      timer = setInterval(()=> tick(), 1000/fps);
+      return;
     }
-    });
 
-  stepBtn.addEventListener('click', ()=>{
-    if(!grid) prepare();
-    tick();
-    });
+    // otherwise (first time or inputs changed): rebuild and start
+    clearInterval(timer); running=false;
+    prepareFromInputs();
+    if(autoSaveCheckbox.checked){ saveSettingsToStorage(); localStorage.setItem(FAST_KEY, fastModeCheckbox.checked ? '1':'0'); }
+    // also persist theme choice
+    localStorage.setItem(THEME_KEY, themeToggle.checked ? 'dark':'light');
 
-  downloadBtn.addEventListener('click', ()=>{
-    if(!grid) return;
-    const link = document.createElement('a');
-    link.download = 'XCA.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    running=true;
+    const fps = 12;
+    timer = setInterval(()=> tick(), 1000/fps);
   });
 
-  // prepare initial view
-  // Subrata simulator
-  prepare();
+  pauseBtn.addEventListener('click', ()=>{
+    if(running){
+      running = false;
+      clearInterval(timer);
+      timer = null;
+    } else {
+      if(!grid) prepareFromInputs();
+      running = true;
+      const fps = 12;
+      timer = setInterval(()=> tick(), 1000/fps);
+    }
+  });
+
+  stepBtn.addEventListener('click', ()=>{
+    if(!grid) prepareFromInputs();
+    if(running){ clearInterval(timer); running = false; }
+    tick();
+  });
+
+  // Reset to defaults (but do not clear localStorage)
+  resetBtn.addEventListener('click', ()=>{
+    clearInterval(timer); running=false; timer=null;
+    nInput.value = DEFAULTS.n;
+    ruleInput.value = DEFAULTS.rule;
+    stepsInput.value = DEFAULTS.steps;
+    cellSizeInput.value = DEFAULTS.cellSize;
+    cfgInput.value = DEFAULTS.cfg;
+    prepareFromInputs();
+  });
+
+  // Reset to last run settings (if any)
+  resetLastBtn.addEventListener('click', ()=>{
+    if(!lastSettings){
+      // try to load from storage and apply
+      const ok = loadSavedAndApply();
+      if(!ok){ alert('No last-run settings found.'); return; }
+    } else {
+      nInput.value = lastSettings.n; ruleInput.value = lastSettings.rule;
+      stepsInput.value = lastSettings.steps; cellSizeInput.value = lastSettings.cellSize;
+      cfgInput.value = lastSettings.cfg || "";
+    }
+    clearInterval(timer); running=false; timer=null;
+    prepareFromInputs();
+  });
+
+  // Hard reset: clear everything incl storage and theme; blank canvas
+  hardResetBtn.addEventListener('click', ()=>{
+    if(!confirm('Hard Reset will clear saved settings and theme. Continue?')) return;
+    clearAllStorage();
+    // restore UI to defaults and theme to light
+    nInput.value = DEFAULTS.n; ruleInput.value = DEFAULTS.rule; stepsInput.value = DEFAULTS.steps;
+    cellSizeInput.value = DEFAULTS.cellSize; cfgInput.value = DEFAULTS.cfg;
+    themeToggle.checked = false; applyTheme('light');
+    fastModeCheckbox.checked = false;
+    clearInterval(timer); running=false; timer=null;
+    grid = null;
+    // clear canvas visually
+    const screenCtx = canvas.getContext('2d');
+    screenCtx.clearRect(0,0, canvas.width, canvas.height);
+    canvas.width = 0; canvas.height = 0;
+    alert('Hard reset done.');
+  });
+
+  // Download PNG: support offscreen or onscreen capture
+  downloadBtn.addEventListener('click', async ()=>{
+    // ensure current render is drawn
+    if(!grid) { alert('Nothing to download'); return; }
+    renderCurrent();
+    try{
+      if(offscreen && offscreen.convertToBlob){
+        const blob = await offscreen.convertToBlob({type:'image/png'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'XCA.png'; a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        const dataUrl = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataUrl; a.download = 'XCA.png'; a.click();
+      }
+    }catch(e){
+      const dataUrl = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl; a.download = 'XCA.png'; a.click();
+    }
+  });
+
+  // auto-save toggle: no handler needed (we read value when starting)
+  // fast mode toggle: remember choice but don't auto-rebuild until next prepare or Start
+  fastModeCheckbox.addEventListener('change', ()=>{
+    localStorage.setItem(FAST_KEY, fastModeCheckbox.checked ? '1':'0');
+  });
+
+  // theme toggle
+  themeToggle.addEventListener('change', ()=>{
+    const theme = themeToggle.checked ? 'dark':'light';
+    applyTheme(theme);
+    localStorage.setItem(THEME_KEY, theme);
+    // re-render colors immediately
+    if(grid) renderCurrent();
+  });
+
+  // helper: try load saved storage and apply, returns boolean
+  function loadSavedAndApply(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    try{
+      const s = JSON.parse(raw);
+      nInput.value = s.n || DEFAULTS.n;
+      ruleInput.value = s.rule || DEFAULTS.rule;
+      stepsInput.value = s.steps || DEFAULTS.steps;
+      cellSizeInput.value = s.cellSize || DEFAULTS.cellSize;
+      cfgInput.value = s.cfg || "";
+      lastSettings = Object.assign({}, s);
+      return true;
+    }catch(e){ return false; }
+  }
+
+  // On page load, optionally draw a default preview
+  prepareFromInputs();
+
+  // if there was saved theme key saved earlier, apply it (already applied at top)
+  // if there was saved fast key, apply
+  const sFast = localStorage.getItem(FAST_KEY);
+  if(sFast === '1') fastModeCheckbox.checked = true;
+
+  // expose save when user manually clicks (not necessary, but useful)
+  // Save last run snapshot whenever Start triggers a prepare and autosave on is checked
+  // lastSettings is updated in saveSettingsToStorage()
+
+  // make keyboard friendly: space toggles start/pause
+  window.addEventListener('keydown', e => {
+    if(e.code === 'Space'){ e.preventDefault(); if(running) pauseBtn.click(); else startBtn.click(); }
+  });
+
 })();
-  
-  </script>
+</script>
 </body>
 </html>
-
-
