@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>XCA Browser Simulator</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Roboto, "Segoe UI", Arial; padding: 16px; background:#f3f7fb; color:#0b2540 }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px }
+    label { font-size:13px }
+    input[type=number], input[type=text], select { padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1 }
+    button { padding:8px 10px; border-radius:8px; border: none; background:#0066cc; color:white; cursor:pointer }
+    button.secondary{ background:#4b5563 }
+    canvas { border:1px solid #cbd5e1; image-rendering: pixelated }
+    .small { font-size:12px }
+  </style>
+</head>
+<body>
+  <h2>Homo-asynchronous</h2>
+  <div class="controls">
+    <label>cells n: <input id="nInput" type="number" value="30" min="3" max="500"></label>
+    <label>rule (0-255): <input id="ruleInput" type="number" value="60" min="0" max="255"></label>
+    <label>steps: <input id="stepsInput" type="number" value="100" min="1" max="1000"></label>
+    <label>cell size px: <input id="cellSizeInput" type="number" value="8" min="2" max="32"></label>
+    <label>seed config (optional binary string): <input id="cfgInput" type="text" placeholder="e.g. 0010101"></label>
+    <button id="startBtn">Start</button>
+    <button id="pauseBtn" class="secondary">Pause</button>
+    <button id="stepBtn" class="secondary">Step</button>
+    <button id="downloadBtn">Download</button>
+    <!-- <div style="margin-left:8px" class="small">Colors: alive=navy, background=lightcyan</div> -->
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+<script>
+
+
+function intArrayFromString(s){ const a = new Uint8Array(s.length); for(let i=0;i<s.length;i++) a[i]= (s.charAt(i)==='1')?1:0; return a }
+
+function PutStar(n, conf){
+  if(n<4) return {shift:-1, hconf:""};
+  let shift=0;
+  // conf is a plain array-like of 0/1
+  while(true){
+    let flag=false;
+    const val = 2*conf[n-1] + conf[0];
+    let hconf = "";
+    if(val==0){
+      if(conf[1]==0) hconf = "0";
+      else if(conf[1]==1 && conf[2]==0 && conf[3]==0) hconf = "010";
+      else if(conf[1]==1 && conf[2]==1 && conf[3]==0 && conf[4]==0 && n>4) hconf = "0110";
+      else flag=true;
+    } else if(val==1){
+      if(conf[1]==0 && conf[2]==1) hconf = "10";
+      else if(conf[1]==0 && conf[2]==0 && conf[3]==1) hconf = "100";
+      else if(conf[1]==1 && conf[2]==0 && conf[3]==1) hconf = "110";
+      else if(conf[1]==1 && conf[2]==0 && conf[3]==0 && conf[4]==1 && n>4) hconf = "1100";
+      else flag=true;
+    } else if(val==2){
+      if(conf[1]==1 && conf[2]==0) hconf = "01";
+      else if(conf[1]==1 && conf[2]==1 && conf[3]==0) hconf = "011";
+      else if(conf[1]==0 && conf[2]==1 && conf[3]==0) hconf = "001";
+      else if(conf[1]==0 && conf[2]==1 && conf[3]==1 && conf[4]==0 && n>4) hconf = "0011";
+      else flag=true;
+    } else if(val==3){
+      if(conf[1]==1) hconf = "1";
+      else if(conf[1]==0 && conf[2]==1 && conf[3]==1) hconf = "101";
+      else if(conf[1]==0 && conf[2]==0 && conf[3]==1 && conf[4]==1 && n>4) hconf = "1001";
+      else flag=true;
+    } else {
+      throw new Error("unexpected Error in PutStar");
+    }
+
+    if(flag){
+      // rotate left by 1
+      shift += 1;
+      const ch = conf[0];
+      for(let i=0;i<n-1;i++) conf[i] = conf[i+1];
+      conf[n-1] = ch;
+    } else {
+      return {shift: shift, hconf: hconf};
+    }
+  }
+}
+
+function NormalForm(n, confIn){
+  // make a copy of conf as mutable array
+  const conf = Array.from(confIn);
+  const NF = [];
+  let countStar = 0;
+  while(true){
+    let length = 0;
+    NF.push(0); // placeholder for shift
+    if(n==1){
+      NF.push(conf[0]);
+    } else if(n==2){
+      if(conf[0]==conf[1]){
+        NF.push(conf[0]); NF.push('*'); NF.push(0); NF.push(conf[1]);
+        countStar += 1;
+      } else {
+        NF.push(conf[0]); NF.push(conf[1]);
+      }
+    } else if(n==3){
+      if(conf[0]==conf[1] && conf[1]==conf[2]){
+        NF.push(conf[0]); NF.push('*');
+        // keep conf same (C code had some moves)
+        countStar += 1;
+        length = 1;
+      } else {
+        NF.push(conf[0]); NF.push(conf[1]); NF.push(conf[2]);
+      }
+    } else if(n==4){
+      const c0=conf[0], c1=conf[1], c2=conf[2], c3=conf[3];
+      if((c0==0 && c1==0 && c2==1 && c3==1) ||
+         (c0==0 && c1==1 && c2==1 && c3==0) ||
+         (c0==1 && c1==1 && c2==0 && c3==0) ||
+         (c0==1 && c1==0 && c2==0 && c3==1)){
+        NF.push(c0); NF.push(c1); NF.push(c2); NF.push(c3);
+      } else {
+        const ps = PutStar(n, conf);
+        const shift = ps.shift, hconf = ps.hconf;
+        if(shift==0) NF[NF.length-1] = 0; else NF[NF.length-1] = n-shift;
+        for(const ch of hconf){ NF.push(parseInt(ch)); }
+        NF.push('*');
+        countStar += 1;
+        length = hconf.length;
+        // shift conf left by length
+        for(let j=length;j<n;j++) conf[j-length] = conf[j];
+      }
+    } else {
+      const ps = PutStar(n, conf);
+      const shift = ps.shift, hconf = ps.hconf;
+      if(shift==0) NF[NF.length-1] = 0; else NF[NF.length-1] = n-shift;
+      for(const ch of hconf) NF.push(parseInt(ch));
+      NF.push('*');
+      countStar += 1;
+      length = hconf.length;
+      for(let j=length;j<n;j++) conf[j-length] = conf[j];
+    }
+
+    if(length==0) break;
+    n = n - length;
+  }
+  return {countStar: countStar, NF: NF};
+}
+
+function updateConfig(conf, n, Rule){
+  // conf is an array of length n (0/1). This mutates and returns it.
+  const nf_res = NormalForm(n, conf.slice());
+  const countStar = nf_res.countStar;
+  const NF = nf_res.NF;
+  const ksel = Math.floor(Math.random()*(countStar+1));
+  const m = n + 2*countStar + 1;
+
+  // find ksel-th star position (first pass finds index i at star?)
+  let i=0, jcount=0;
+  while(jcount<ksel){ if(NF[i]=='*') jcount++; i++; }
+  i=0; jcount=0;
+  while(jcount<ksel){ if(NF[i]=='*') jcount++; i++; }
+  let j = i+1;
+  const hconf = [];
+  while(j < m && NF[j] !== '*'){ hconf.push(NF[j]); j++; }
+  const length = hconf.length;
+
+  for(let idx=0; idx<length; idx++){
+    const left = (idx==0)? hconf[length-1] : hconf[idx-1];
+    const right = (idx==length-1)? hconf[0] : hconf[idx+1];
+    const newbit = Rule[4*left + 2*hconf[idx] + right];
+    NF[i+1+idx] = newbit;
+  }
+
+  const t_conf = new Array(n).fill(0);
+  j = m-1;
+  let i_conf = n-1;
+  while(j>0){
+    if(NF[j-1] !== '*'){
+      conf[i_conf] = NF[j];
+      i_conf--; j--;
+    } else {
+      const shift = NF[j];
+      const lengthTail = n - i_conf - 1;
+      // copy tail
+      for(let kidx=i_conf+1;kidx<n;kidx++) t_conf[kidx-(i_conf+1)] = conf[kidx];
+      for(let kidx=i_conf+1;kidx<n;kidx++){
+        conf[kidx] = t_conf[(kidx-(i_conf+1) + shift) % lengthTail];
+      }
+      j -= 2;
+    }
+  }
+  // final piece when j==0
+  const shift = NF[j];
+  const lengthTail = n - i_conf - 1;
+  for(let kidx=i_conf+1;kidx<n;kidx++) t_conf[kidx-(i_conf+1)] = conf[kidx];
+  for(let kidx=i_conf+1;kidx<n;kidx++){
+    conf[kidx] = t_conf[(kidx-(i_conf+1) + shift) % lengthTail];
+  }
+
+  if(i_conf !== -1){ console.error("Unexpected error.H"); }
+  return conf;
+}
+
+function update_XCA(grid, Rule, stepIndex){
+  // grid is a 2D array rows x cols; we compute next row from current row index stepIndex % rows
+  const rows = grid.length, cols = grid[0].length;
+  const cur = grid[stepIndex % rows];
+  const nxt = grid[(stepIndex+1) % rows];
+  // update nxt in circular manner
+  const newconf = updateConfig(cur.slice(), cols, Rule);
+  for(let c=0;c<cols;c++) nxt[c] = newconf[c];
+  return nxt;
+}
+
+// Utility to build Rule bits array LSB first
+function ruleBitsFromNumber(k){ const Rule=[]; let kk=k; for(let i=0;i<8;i++){ Rule.push(kk&1); kk >>=1; } return Rule }
+
+// draw entire grid on canvas
+function drawGrid(ctx, grid, cellSize){
+  const rows = grid.length, cols = grid[0].length;
+  ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      if(grid[r][c]==1) ctx.fillStyle = '#000066'; else ctx.fillStyle = '#ccffff';
+      ctx.fillRect(c*cellSize, r*cellSize, cellSize-1, cellSize-1);
+    }
+  }
+}
+
+// Main runner
+(function(){
+  const nInput = document.getElementById('nInput');
+  const ruleInput = document.getElementById('ruleInput');
+  const stepsInput = document.getElementById('stepsInput');
+  const cellSizeInput = document.getElementById('cellSizeInput');
+  const cfgInput = document.getElementById('cfgInput');
+  const startBtn = document.getElementById('startBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const stepBtn = document.getElementById('stepBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  let grid = null; // 2D array rows x cols
+  let running = false;
+  let timer = null;
+  let step = 0;
+  let Rule = ruleBitsFromNumber(60);
+
+  function prepare(){
+    const n = parseInt(nInput.value,10);
+    const steps = parseInt(stepsInput.value,10);
+    const cellSize = parseInt(cellSizeInput.value,10);
+    canvas.width = n * cellSize;
+    canvas.height = (steps+1) * cellSize;
+    // create grid as array of rows
+    grid = new Array(steps+1);
+    for(let r=0;r<=steps;r++){
+      grid[r] = new Array(n).fill(0);
+    }
+    // initial conf
+    if(cfgInput.value.trim().length===n){
+      const arr = cfgInput.value.trim().split('').map(ch=> ch==='1'?1:0);
+      grid[0] = arr.slice();
+    } else {
+      for(let i=0;i<n;i++) grid[0][i] = (Math.random()<0.5)?0:1;
+      // reflect into the rest already zeros
+    }
+    step = 0;
+    Rule = ruleBitsFromNumber(parseInt(ruleInput.value,10) || 0);
+    drawGrid(ctx, grid, parseInt(cellSizeInput.value,10));
+  }
+
+  function tick(){
+    const n = grid[0].length;
+    const steps = grid.length-1;
+    update_XCA(grid, Rule, step);
+    step++;
+    const cellSize = parseInt(cellSizeInput.value,10);
+    drawGrid(ctx, grid, cellSize);
+    if(step>=steps) { running=false; clearInterval(timer); }
+  }
+  startBtn.addEventListener('click', ()=>{
+
+    // CASE 1 — If grid exists AND nothing changed → resume
+    if (grid && !running) {
+        running = true;
+        const fps = 12;
+        timer = setInterval(()=>{ tick(); }, 1000/fps);
+        return;
+    }
+
+    // CASE 2 — Restart ONLY when:
+    // - First time
+    // - Or user changed n, steps, rule, config, cellSize
+    clearInterval(timer);
+    running = false;
+    prepare();     // rebuild everything
+    running = true;
+
+    const fps = 12;
+    timer = setInterval(()=>{ tick(); }, 1000/fps);
+});
+
+//   startBtn.addEventListener('click', ()=>{
+//     clearInterval(timer);
+//     running = false;
+//     prepare();   // <-- always rebuild grid & canvas
+
+//     running = true;
+//     const fps = 12;
+//     timer = setInterval(()=>{ tick(); }, 1000/fps);
+//     });
+
+    pauseBtn.addEventListener('click', ()=>{
+    if(running){
+        running = false;
+        clearInterval(timer);
+    } else {
+        running = true;
+        const fps=12;
+        timer=setInterval(()=>{ tick(); }, 1000/fps);
+    }
+    });
+
+  stepBtn.addEventListener('click', ()=>{
+    if(!grid) prepare();
+    tick();
+    });
+
+  downloadBtn.addEventListener('click', ()=>{
+    if(!grid) return;
+    const link = document.createElement('a');
+    link.download = 'XCA.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+
+  // prepare initial view
+  prepare();
+})();
+  </script>
+</body>
+</html>
