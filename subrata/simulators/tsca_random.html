@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TSCA Simulator — Advanced</title>
+<style>
+  body {
+    font-family: "Times New Roman", serif;
+    background: #f5f7fa;
+    text-align: center;
+  }
+  h2 { font-size: 26px; }
+  canvas { border: 1px solid #222; display: block; margin: 10px auto; background: white; }
+  .controls { margin: 10px; font-size: 16px; }
+  button { font-size: 14px; padding: 6px 12px; margin: 5px; }
+</style>
+</head>
+<body>
+
+<h2>TSCA Simulator — Density & Space–Time Analysis</h2>
+
+<div class="controls">
+  Rule 1 <input type="number" id="rule1" value="136" min="0" max="255">
+  Rule 2 <input type="number" id="rule2" value="154" min="0" max="255">
+  τ <input type="number" id="tau" value="0.4" step="0.05" min="0" max="1"><br><br>
+
+  Cells <input type="number" id="cellCount" value="100">
+  Steps <input type="number" id="stepCount" value="150">
+  Initial Density <input type="number" id="initDensity" value="0.5" step="0.05"><br><br>
+
+  Runs (averaging) <input type="number" id="runs" value="1" min="1"><br><br>
+
+  <button onclick="startSimulation()">Start Simulation</button>
+  <button onclick="exportDensityCSV()">Export Density CSV</button>
+  <button onclick="exportSpacePNG()">Export Space–Time PNG</button>
+  <button onclick="exportDensityPNG()">Export Density Plot PNG</button>
+</div>
+
+<canvas id="spaceTimeCanvas"></canvas>
+<canvas id="densityCanvas" width="600" height="400"></canvas>
+
+<script>
+/* -------------------- GLOBAL VARIABLES -------------------- */
+let densityHistory = [];
+let avgDensity = [];
+
+/* -------------------- CA UTILITIES -------------------- */
+function decimalToBits(rule) {
+  return rule.toString(2).padStart(8,'0').split('').map(Number).reverse();
+}
+
+function initializeRow(cells, density) {
+  return Array.from({length:cells},()=>Math.random()<density?1:0);
+}
+
+function calculateDensity(row) {
+  return row.reduce((a,b)=>a+b,0)/row.length;
+}
+
+function updateTSCA(row, rule1, rule2, tau) {
+  const rule = Math.random() < tau ? rule1 : rule2;
+  const bits = decimalToBits(rule);
+  const n = row.length;
+  return row.map((_, i) => {
+    const idx = row[(i-1+n)%n]*4 + row[i]*2 + row[(i+1)%n];
+    return bits[idx];
+  });
+}
+
+/* -------------------- DRAWING FUNCTIONS -------------------- */
+function drawRow(ctx, row, step, cellSize) {
+  row.forEach((v, x) => {
+    ctx.fillStyle = v ? "#000066" : "#ccffff";
+    ctx.fillRect(x*cellSize, step*cellSize, cellSize, cellSize);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(x*cellSize, step*cellSize, cellSize, cellSize);
+  });
+}
+
+function drawDensityPlot(ctx, data) {
+  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+
+  const width = ctx.canvas.width;
+  const height = ctx.canvas.height;
+  const margin = {left:60,right:20,top:20,bottom:60};
+
+  // Draw background
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0,width,height);
+
+  // Draw axes
+  ctx.strokeStyle="black";
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(margin.left,margin.top);
+  ctx.lineTo(margin.left,height-margin.bottom);
+  ctx.lineTo(width-margin.right,height-margin.bottom);
+  ctx.stroke();
+
+  // Draw Y-axis labels (Density)
+  ctx.fillStyle = "black";
+  ctx.font = "14px Times New Roman";
+  ctx.textAlign = "right";
+  const ySteps = 5;
+  for(let i=0;i<=ySteps;i++){
+    const y = margin.top + i*(height-margin.top-margin.bottom)/ySteps;
+    const value = (1 - i/ySteps).toFixed(1);
+    ctx.fillText(value, margin.left-5, y+5);
+    // tick marks
+    ctx.beginPath();
+    ctx.moveTo(margin.left-3, y);
+    ctx.lineTo(margin.left, y);
+    ctx.stroke();
+  }
+
+  // Draw X-axis labels (Time)
+  ctx.textAlign = "center";
+  const xSteps = Math.min(10, data.length-1);
+  for(let i=0;i<=xSteps;i++){
+    const x = margin.left + i*(width-margin.left-margin.right)/xSteps;
+    const t = Math.round(i*(data.length-1)/xSteps);
+    ctx.fillText(t, x, height-margin.bottom+20);
+    // tick marks
+    ctx.beginPath();
+    ctx.moveTo(x, height-margin.bottom);
+    ctx.lineTo(x, height-margin.bottom+3);
+    ctx.stroke();
+  }
+
+  // Axis titles
+  ctx.textAlign="center";
+  ctx.fillText("Time", margin.left+(width-margin.left-margin.right)/2, height-20);
+
+  ctx.save();
+  ctx.translate(20, margin.top+(height-margin.top-margin.bottom)/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText("Density of 1",0,0);
+  ctx.restore();
+
+  // Draw density curve
+  if(data.length>1){
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    data.forEach((d,i)=>{
+      const x = margin.left + i*(width-margin.left-margin.right)/(data.length-1);
+      const y = margin.top + (1 - d)*(height-margin.top-margin.bottom);
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+
+    // Draw markers
+    data.forEach((d,i)=>{
+      const x = margin.left + i*(width-margin.left-margin.right)/(data.length-1);
+      const y = margin.top + (1 - d)*(height-margin.top-margin.bottom);
+      ctx.fillStyle = "blue";
+      ctx.beginPath();
+      ctx.arc(x,y,3,0,2*Math.PI);
+      ctx.fill();
+    });
+  }
+}
+
+/* -------------------- SIMULATION -------------------- */
+async function startSimulation() {
+  const rule1 = +document.getElementById("rule1").value;
+  const rule2 = +document.getElementById("rule2").value;
+  const tau = +document.getElementById("tau").value;
+  const cells = +document.getElementById("cellCount").value;
+  const steps = +document.getElementById("stepCount").value;
+  const density = +document.getElementById("initDensity").value;
+  const runs = +document.getElementById("runs").value;
+
+  const cellSize = 8;
+  const spaceTimeCanvas = document.getElementById("spaceTimeCanvas");
+  spaceTimeCanvas.width = cells * cellSize;
+  spaceTimeCanvas.height = steps * cellSize;
+  const ctx = spaceTimeCanvas.getContext("2d");
+
+  const densityCanvas = document.getElementById("densityCanvas");
+  const dctx = densityCanvas.getContext("2d");
+
+  densityHistory = Array.from({length:steps},()=>[]);
+  ctx.clearRect(0,0,spaceTimeCanvas.width,spaceTimeCanvas.height);
+
+  for(let run=0; run<runs; run++){
+    let row = initializeRow(cells,density);
+    densityHistory[0].push(calculateDensity(row));
+    if(run===0) drawRow(ctx,row,0,cellSize);
+
+    for(let step=1; step<steps; step++){
+      row = updateTSCA(row, rule1, rule2, tau);
+      densityHistory[step].push(calculateDensity(row));
+      if(run===0) drawRow(ctx,row,step,cellSize);
+      await new Promise(r=>setTimeout(r,0));
+    }
+  }
+
+  // Compute average density
+  avgDensity = densityHistory.map(arr=>arr.reduce((a,b)=>a+b,0)/arr.length);
+  drawDensityPlot(dctx, avgDensity);
+}
+
+/* -------------------- EXPORT FUNCTIONS -------------------- */
+function exportDensityCSV() {
+  if(avgDensity.length===0){ alert("Run simulation first"); return; }
+  let csv = "time,avg_density\n";
+  avgDensity.forEach((d,i)=>csv+=`${i},${d}\n`);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download = "density_TSCA.csv";
+  a.click();
+}
+
+function exportSpacePNG() {
+  const canvas = document.getElementById("spaceTimeCanvas");
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = "TSCA_space_time.png";
+  a.click();
+}
+
+function exportDensityPNG() {
+  const canvas = document.getElementById("densityCanvas");
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = "Density_TSCA.png";
+  a.click();
+}
+</script>
+
+</body>
+</html>
