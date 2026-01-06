@@ -1,0 +1,79 @@
+body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Header with Cellular Automata Image */
+.header-academic {
+    position: relative;
+    background: url("images/cellular_automata.png") center/cover no-repeat;
+    height: 260px;
+}
+
+.header-academic .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 44, 77, 0.7);
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+    padding-top: 80px;
+}
+
+/* Academic Card Header */
+.academic-header {
+    background-color: #f5f7fa;
+    border-bottom: 2px solid #0b2c4d;
+}
+
+/* Table */
+table thead th {
+    background-color: #e9edf2;
+    color: #0b2c4d;
+    font-weight: 600;
+}
+
+table tbody tr:hover {
+    background-color: #f1f5fa;
+}
+
+/* Buttons */
+.btn-view {
+    background-color: #198754;
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 14px;
+}
+
+.btn-view:hover {
+    background-color: #146c43;
+    color: #fff;
+}
+
+.btn-pdf {
+    background-color: #0b5ed7;
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 14px;
+}
+
+.btn-pdf:hover {
+    background-color: #084298;
+}
+
+/* Modal */
+.modal-body {
+    padding: 0;
+}
+
+iframe {
+    border: none;
+}
+
+/* Footer */
+footer {
+    font-size: 0.9rem;
+    color: #555;
+}
