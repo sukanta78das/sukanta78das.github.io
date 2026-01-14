@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>α-Asynchronous Cellular Automaton Simulator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f0ffff;
+    margin: 0;
+    padding: 10px;
+}
+
+h2 {
+    text-align: center;
+}
+
+#controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+button {
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+canvas {
+    border: 1px solid #333;
+    display: block;
+    margin: 10px auto;
+    background: rgb(204,255,255);
+}
+
+#initConfig {
+    width: 95%;
+    margin: auto;
+    padding: 6px;
+    background: #ffffff;
+    border: 1px solid #999;
+    font-family: monospace;
+    font-size: 12px;
+    overflow-x: auto;
+}
+</style>
+</head>
+
+<body>
+
+<h2>α-Asynchronous 1D Cellular Automaton (ECA)</h2>
+
+<div id="controls">
+    <label>Cells
+        <input type="number" id="cells" value="100" min="10" max="500">
+    </label>
+
+    <label>Rule
+        <input type="number" id="rule" value="60" min="0" max="255">
+    </label>
+
+    <label>α
+        <input type="number" id="alpha" value="0.7" step="0.05" min="0" max="1">
+    </label>
+
+    <label>Steps
+        <input type="number" id="steps" value="150">
+    </label>
+
+    <label>Speed (FPS)
+        <input type="range" id="speed" min="1" max="60" value="10">
+    </label>
+
+    <button onclick="start()">Play</button>
+    <button onclick="pause()">Pause</button>
+    <button onclick="exportPNG()">Export PNG</button>
+</div>
+
+<div id="initConfig"><b>Initial configuration:</b></div>
+
+<canvas id="caCanvas"></canvas>
+<canvas id="densityCanvas" height="260"></canvas>
+
+<script>
+/* ---------- Constants ---------- */
+const cellSize = 6;
+const colAlive = "rgb(0,0,102)";
+const colDead  = "rgb(204,255,255)";
+
+/* ---------- Globals ---------- */
+let timer = null;
+let t = 0;
+let cells = [];
+let rule = [];
+let n, steps, alpha;
+let ctx, dctx;
+let densities = [];
+
+/* ---------- Utilities ---------- */
+function BtoD(bits) {
+    return (bits[0] << 2) | (bits[1] << 1) | bits[2];
+}
+
+function buildRule(num) {
+    let r = [];
+    for (let i = 0; i < 8; i++) {
+        r.push(num & 1);
+        num >>= 1;
+    }
+    return r;
+}
+
+/* ---------- Alpha Update ---------- */
+function alphaUpdatePeriodic(config) {
+    let next = [...config];
+    for (let i = 0; i < n; i++) {
+        if (Math.random() < alpha) {
+            let l = config[(i - 1 + n) % n];
+            let c = config[i];
+            let r = config[(i + 1) % n];
+            next[i] = rule[BtoD([l, c, r])];
+        }
+    }
+    return next;
+}
+
+/* ---------- Drawing ---------- */
+function drawRow(row, time) {
+    for (let i = 0; i < n; i++) {
+        ctx.fillStyle = row[i] ? colAlive : colDead;
+        ctx.fillRect(i * cellSize, time * cellSize, cellSize - 1, cellSize - 1);
+    }
+}
+
+function drawDensityAxes() {
+    const ctx = dctx;
+    const W = ctx.canvas.width;
+    const H = ctx.canvas.height;
+
+    /* ---- Responsive geometry ---- */
+    const tickArea = Math.max(40, 0.08 * W);   // label area
+    const axisGap  = Math.max(4,  0.01 * W);   // spacing
+    const axisX    = tickArea + axisGap;
+    const plotX0   = axisX;
+
+    const topMargin    = 0.06 * H;
+    const bottomMargin = 0.18 * H;
+    const rightMargin  = 0.04 * W;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = `${Math.max(10, 0.02 * W)}px Arial`;
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "black";
+
+    /* ---- Y-axis ---- */
+    ctx.beginPath();
+    ctx.moveTo(axisX, topMargin);
+    ctx.lineTo(axisX, H - bottomMargin);
+    ctx.stroke();
+
+    /* ---- X-axis ---- */
+    ctx.beginPath();
+    ctx.moveTo(axisX, H - bottomMargin);
+    ctx.lineTo(W - rightMargin, H - bottomMargin);
+    ctx.stroke();
+
+    /* ---- Y ticks + labels (LEFT of axis) ---- */
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+
+    for (let i = 0; i <= 5; i++) {
+        const y = H - bottomMargin - (i / 5) * (H - bottomMargin - topMargin);
+        ctx.fillText((i / 5).toFixed(1), tickArea - 2, y);
+
+        ctx.beginPath();
+        ctx.moveTo(axisX - 6, y);
+        ctx.lineTo(axisX, y);
+        ctx.stroke();
+    }
+
+    /* ---- X ticks ---- */
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+
+    for (let i = 0; i <= 5; i++) {
+        const x = axisX + (i / 5) * (W - axisX - rightMargin);
+        ctx.fillText(
+            Math.round((i / 5) * steps),
+            x,
+            H - bottomMargin + 6
+        );
+
+        ctx.beginPath();
+        ctx.moveTo(x, H - bottomMargin);
+        ctx.lineTo(x, H - bottomMargin + 6);
+        ctx.stroke();
+    }
+
+    /* ---- X-axis label ---- */
+    ctx.font = `${Math.max(11, 0.022 * W)}px Arial`;
+    ctx.fillText(
+        "Time (steps)",
+        (axisX + W - rightMargin) / 2,
+        H - 5
+    );
+
+    return { plotX0, topMargin, bottomMargin, rightMargin };
+}
+
+
+
+function drawDensity() {
+    const { plotX0, topMargin, bottomMargin, rightMargin } = drawDensityAxes();
+
+    const plotWidth  = dctx.canvas.width - plotX0 - rightMargin;
+    const plotHeight = dctx.canvas.height - bottomMargin - topMargin;
+
+    dctx.beginPath();
+    densities.forEach((v, i) => {
+        const x = plotX0 + (i / (steps - 1)) * plotWidth;
+        const y = topMargin + (1 - v) * plotHeight;
+
+        if (i === 0) dctx.moveTo(x, y);
+        else dctx.lineTo(x, y);
+    });
+
+    dctx.strokeStyle = "red";
+    dctx.lineWidth = 2;
+    dctx.stroke();
+}
+
+/* ---------- Simulation ---------- */
+function start() {
+    pause();
+
+    n = parseInt(document.getElementById("cells").value);
+    steps = parseInt(document.getElementById("steps").value);
+    alpha = parseFloat(document.getElementById("alpha").value);
+    rule = buildRule(parseInt(document.getElementById("rule").value));
+
+    const canvas = document.getElementById("caCanvas");
+    canvas.width = n * cellSize;
+    canvas.height = (steps + 1) * cellSize;
+    ctx = canvas.getContext("2d");
+
+    const dCanvas = document.getElementById("densityCanvas");
+    dCanvas.width = canvas.width;
+    dctx = dCanvas.getContext("2d");
+
+    cells = [];
+    densities = [];
+    t = 0;
+
+    // Random initial configuration
+    cells[0] = Array.from({length: n}, () => Math.random() < 0.5 ? 1 : 0);
+    document.getElementById("initConfig").innerHTML =
+        "<b>Initial configuration:</b> " + cells[0].join("");
+
+    drawRow(cells[0], 0);
+    run();
+}
+
+function run() {
+    const fps = document.getElementById("speed").value;
+    timer = setInterval(() => {
+        if (t >= steps) {
+            pause();
+            return;
+        }
+        t++;
+        cells[t] = alphaUpdatePeriodic(cells[t - 1]);
+        drawRow(cells[t], t);
+
+        let ones = cells[t].reduce((a, b) => a + b, 0);
+        densities.push(ones / n);
+        drawDensity();
+    }, 1000 / fps);
+}
+
+function pause() {
+    if (timer) clearInterval(timer);
+    timer = null;
+}
+
+/* ---------- Export ---------- */
+function exportPNG() {
+    const canvas = document.getElementById("caCanvas");
+    const link = document.createElement("a");
+    link.download = "alpha_async_CA.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+}
+</script>
+
+</body>
+</html>
