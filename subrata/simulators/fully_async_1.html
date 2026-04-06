@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fully Asynchronous 1D CA</title>
+  <style>
+    :root{
+      --bg:#f3f7fb; --panel:#ffffff; --text:#062438; --accent:#0b63d6; --alive:#000066; --dead:#ccffff; --grid:#cbd5e1;
+    }
+    [data-theme="dark"]{ --bg:#0b1220; --panel:#071029; --text:#dcecf9; --accent:#4aa3ff; --alive:#9ad0ff; --dead:#071029; --grid:#0b2240 }
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); margin:16px}
+    .app{display:flex; gap:16px; align-items:flex-start}
+    .controls{width:360px; background:var(--panel); padding:12px; border-radius:8px; box-shadow:0 6px 18px rgba(2,8,23,0.08)}
+    label{display:block; font-size:13px; margin-top:8px}
+    input[type=number], input[type=text]{width:100%; padding:6px 8px; margin-top:6px; border-radius:6px; border:1px solid var(--grid); background:transparent; color:var(--text)}
+    .row{display:flex; gap:8px; margin-top:8px}
+    button{padding:8px 10px; border-radius:8px; border:none; cursor:pointer; background:var(--accent); color:white}
+    button.secondary{background:transparent; color:var(--text); border:1px solid var(--grid)}
+    #canvasWrap{background:var(--panel); padding:12px; border-radius:8px}
+    canvas{image-rendering:pixelated; display:block; background:var(--dead);}
+    .small{font-size:12px; color:gray}
+    .legend{display:flex; gap:8px; align-items:center; margin-top:8px}
+    .dot{width:14px; height:14px; border-radius:3px}
+  </style>
+</head>
+
+<body data-theme="light">
+<h2>Fully Asynchronous 1D Cellular Automaton — Simulator</h2>
+
+<div class="app">
+<div class="controls">
+
+<label>Cells (n)
+<input id="nInput" type="number" value="30">
+</label>
+
+<label>Rule (0–255)
+<input id="ruleInput" type="number" value="60">
+</label>
+
+<label>Steps
+<input id="stepsInput" type="number" value="100">
+</label>
+
+<label>Cell size
+<input id="cellSizeInput" type="number" value="8">
+</label>
+
+<label>Initial configuration (optional binary string — length = n)
+<input id="cfgInput" type="text" placeholder="e.g. 0010101">
+</label>
+
+<div class="row">
+<button id="startBtn">Start</button>
+<button id="pauseBtn" class="secondary">Pause</button>
+<button id="stepBtn" class="secondary">Step</button>
+<button id="resetBtn" class="secondary">Reset</button>
+</div>
+
+<div class="row">
+<button id="downloadBtn" class="secondary">Download PNG</button>
+<button id="downloadDataBtn" class="secondary">Download CSV</button>
+<button id="themeBtn" class="secondary">Theme: Light</button>
+</div>
+
+<!-- MODE BUTTON -->
+<div class="row">
+<button id="modeBtn" class="secondary">Mode: n-step</button>
+</div>
+
+<div class="legend">
+<div class="dot" style="background:var(--alive)"></div><div class="small">alive</div>
+<div class="dot" style="background:var(--dead); border:1px solid var(--grid)"></div><div class="small">dead</div>
+</div>
+
+</div>
+
+<div id="canvasWrap">
+<canvas id="gridCanvas"></canvas>
+<canvas id="chartCanvas" style="margin-top:8px; height:120px;"></canvas>
+</div>
+
+</div>
+
+<script>
+
+// ---------- RULE ----------
+function ruleBitsFromNumber(k){ const R=[]; for(let i=0;i<8;i++){ R.push((k>>i)&1);} return R; }
+function BtoD(a){ return (a[0]<<2)+(a[1]<<1)+a[2]; }
+function countOnes(a){ return a.reduce((x,y)=>x+y,0); }
+
+// ---------- UPDATE ----------
+function FullyUpdatePeriodic(c,n,rule){
+  let d=c.slice();
+  for(let t=0;t<n;t++){
+    const j=Math.floor(Math.random()*n);
+    const idx=BtoD([c[(j-1+n)%n],c[j],c[(j+1)%n]]);
+    d[j]=rule[idx];
+    c=d.slice();
+  }
+  return d;
+}
+
+function FullyUpdatePeriodic_step1(c,n,rule){
+  let d=c.slice();
+  const j=Math.floor(Math.random()*n);
+  const idx=BtoD([c[(j-1+n)%n],c[j],c[(j+1)%n]]);
+  d[j]=rule[idx];
+  return d;
+}
+
+// ---------- DRAW ----------
+function drawGrid(ctx, grid, size, alive, dead){
+  const rows=grid.length, cols=grid[0].length;
+  ctx.canvas.width=cols*size;
+  ctx.canvas.height=rows*size;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      ctx.fillStyle=grid[r][c]?alive:dead;
+      ctx.fillRect(c*size,r*size,size-1,size-1);
+    }
+  }
+}
+
+function drawChart(ctx,data){
+  const w=ctx.canvas.clientWidth, h=ctx.canvas.clientHeight;
+  ctx.canvas.width=w; ctx.canvas.height=h;
+  ctx.beginPath();
+  for(let i=0;i<data.length;i++){
+    const x=(i/(data.length-1))*w;
+    const y=h-data[i]*h;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+}
+
+// ---------- STATE ----------
+let grid=null, densities=[], stepIndex=0;
+let Rule=ruleBitsFromNumber(60);
+let mode="nstep", running=false, timer=null;
+
+// ---------- DOM ----------
+const gridCanvas=document.getElementById("gridCanvas");
+const chartCanvas=document.getElementById("chartCanvas");
+const gridCtx=gridCanvas.getContext("2d");
+const chartCtx=chartCanvas.getContext("2d");
+
+// ---------- PREPARE ----------
+function prepare(){
+  const n=+nInput.value, steps=+stepsInput.value;
+  Rule=ruleBitsFromNumber(+ruleInput.value);
+
+  grid=Array.from({length:steps+1},()=>Array(n).fill(0));
+
+  const cfg=cfgInput.value.trim();
+  if(cfg.length===n && /^[01]+$/.test(cfg)){
+    for(let i=0;i<n;i++) grid[0][i]=+cfg[i];
+  }else{
+    for(let i=0;i<n;i++) grid[0][i]=Math.random()<0.5?1:0;
+  }
+
+  densities=[countOnes(grid[0])/n];
+  stepIndex=0;
+
+  drawGrid(gridCtx,grid,+cellSizeInput.value,"#000066","#ccffff");
+  drawChart(chartCtx,densities);
+}
+
+// ---------- TICK ----------
+function tick(){
+  if(stepIndex >= grid.length-1){
+    running=false;
+    clearInterval(timer);
+    return;
+  }
+
+  const cols=grid[0].length;
+  const cur=grid[stepIndex].slice();
+
+  const nxt = (mode==="nstep")
+    ? FullyUpdatePeriodic(cur,cols,Rule)
+    : FullyUpdatePeriodic_step1(cur,cols,Rule);
+
+  grid[stepIndex+1]=nxt;
+  stepIndex++;
+
+  densities.push(countOnes(nxt)/cols);
+
+  drawGrid(gridCtx,grid,+cellSizeInput.value,"#000066","#ccffff");
+  drawChart(chartCtx,densities);
+}
+
+// ---------- EVENTS ----------
+startBtn.onclick=()=>{
+  prepare();
+  if(running) return;
+  running=true;
+  timer=setInterval(()=>{ if(running) tick(); },80);
+};
+
+pauseBtn.onclick=()=>{
+  running=!running;
+  if(!running) clearInterval(timer);
+  else timer=setInterval(()=>{ if(running) tick(); },80);
+};
+
+stepBtn.onclick=()=>{ if(!grid) prepare(); tick(); };
+resetBtn.onclick=()=>{ prepare(); running=false; clearInterval(timer); };
+
+// MODE TOGGLE
+modeBtn.onclick=()=>{
+  mode = (mode==="nstep")?"onestep":"nstep";
+  modeBtn.textContent = "Mode: " + (mode==="nstep"?"n-step":"1-step");
+};
+
+// DOWNLOAD PNG
+downloadBtn.onclick=()=>{
+  const out=document.createElement('canvas');
+  out.width=gridCanvas.width;
+  out.height=gridCanvas.height+chartCanvas.height;
+  const ctx=out.getContext('2d');
+  ctx.drawImage(gridCanvas,0,0);
+  ctx.drawImage(chartCanvas,0,gridCanvas.height);
+  const a=document.createElement('a');
+  a.download="ca.png";
+  a.href=out.toDataURL();
+  a.click();
+};
+
+// CSV
+downloadDataBtn.onclick=()=>{
+  let csv="t,density\n";
+  densities.forEach((d,i)=>csv+=`${i},${d}\n`);
+  const blob=new Blob([csv]);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download="density.csv";
+  a.click();
+};
+
+// INIT
+prepare();
+
+</script>
+</body>
+</html>
