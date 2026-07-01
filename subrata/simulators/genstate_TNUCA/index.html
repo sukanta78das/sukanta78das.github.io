@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Temporal Non-uniform Cellular Automata Simulator
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+<h1>Temporal Non-uniform Cellular Automata</h1>
+
+<h2>State Transition Graph</h2>
+
+</header>
+
+<div class="toolbar">
+
+<div class="inputBlock">
+
+
+<label>Number of Cells</label>
+
+<input
+    type="number"
+    id="cells"
+    value="4"
+    min="1"
+    max="20">
+
+<label>Rule A</label>
+
+<input
+type="number"
+id="ruleA"
+min="0"
+max="255"
+value="90">
+
+</div>
+
+<div class="inputBlock">
+
+<label>Rule B</label>
+
+<input
+type="number"
+id="ruleB"
+min="0"
+max="255"
+value="60">
+
+</div>
+
+<div class="inputBlock">
+
+<label>Update Sequence</label>
+
+<input
+type="text"
+id="sequence"
+value="A,B,B,B">
+
+</div>
+
+<button id="generateBtn">
+
+Generate Graph
+
+</button>
+
+<button id="pngBtn">
+
+Download PNG
+
+</button>
+
+</div>
+
+<div class="info">
+
+Number of Cells :
+
+<span id="cellCount">
+
+4
+
+</span>
+
+&nbsp;&nbsp;
+
+Configurations :
+
+<span id="configCount">
+
+16
+
+</span>
+
+</div>
+
+<div class="legend">
+
+<div>
+
+<span class="solid"></span>
+
+Rule A
+
+</div>
+
+<div>
+
+<span class="dashed"></span>
+
+Rule B
+
+</div>
+
+</div>
+
+<div id="cy"></div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

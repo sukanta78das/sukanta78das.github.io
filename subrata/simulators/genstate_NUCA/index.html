@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Non-uniform Cellular Automata - Transition Diagram
+    </title>
+
+    <!-- Math Font -->
+    <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
+
+    <!-- Cytoscape -->
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+    <!-- Better Layout -->
+    <script src="https://unpkg.com/layout-base/layout-base.js"></script>
+    <script src="https://unpkg.com/cose-base/cose-base.js"></script>
+    <script src="https://unpkg.com/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
+
+    <script>
+        cytoscape.use(cytoscapeCoseBilkent);
+    </script>
+
+    <!-- SVG Export -->
+    <script src="https://unpkg.com/cytoscape-svg/cytoscape-svg.js"></script>
+
+    <!-- File Saver -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <!-- <img src="sim-logo.png"
+        alt="Logo"
+        style="position:fixed; top:15px; left:15px; width:80px; height:auto; z-index:1000;"> -->
+
+        <h1>
+            Non-uniform Cellular Automata
+        </h1>
+
+        <h2>
+            Transition Diagram under Null Boundary Conditions
+        </h2>
+
+    </header>
+
+    <div class="toolbar">
+
+        <div class="inputBlock">
+
+            <label>
+                Rule Sequence
+            </label>
+
+            <input
+                type="text"
+                id="rules"
+                value="0,0,0,0"
+                placeholder="Example: 30,90,150,45">
+
+        </div>
+
+        <button id="generateBtn">
+
+            Generate Graph
+
+        </button>
+
+        <button id="pngBtn">
+
+            Download PNG
+
+        </button>
+
+        <button id="svgBtn">
+
+            Download SVG
+
+        </button>
+
+    </div>
+
+    <div class="info">
+
+        Number of Cells :
+        <span id="cellCount">
+            4
+        </span>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        Total Configurations :
+        <span id="configCount">
+            16
+        </span>
+
+    </div>
+
+    <div id="cy"></div>
+
+    <footer>
+
+        Non-uniform Cellular Automata - Transition Diagram
+
+    </footer>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

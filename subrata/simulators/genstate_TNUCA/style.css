@@ -1,0 +1,318 @@
+/*=========================================================
+    Non-uniform Cellular Automata Simulator
+    style.css
+=========================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/*---------------------------------------------------------
+    Body
+---------------------------------------------------------*/
+
+body{
+
+    background:#ffffff;
+
+    color:#000000;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+    padding:30px;
+
+}
+
+/*---------------------------------------------------------
+    Main Container
+---------------------------------------------------------*/
+
+.container{
+
+    width:95%;
+
+    max-width:1800px;
+
+    margin:auto;
+
+}
+
+/*---------------------------------------------------------
+    Heading
+---------------------------------------------------------*/
+
+header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+header h1{
+
+    font-size:34px;
+
+    font-weight:600;
+
+    letter-spacing:1px;
+
+}
+
+header h2{
+
+    margin-top:8px;
+
+    font-size:20px;
+
+    font-weight:400;
+
+    color:#333;
+
+}
+
+/*---------------------------------------------------------
+    Toolbar
+---------------------------------------------------------*/
+
+.toolbar{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+    margin-bottom:20px;
+
+}
+
+/*---------------------------------------------------------
+    Rule Input
+---------------------------------------------------------*/
+
+.inputBlock{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.inputBlock label{
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
+.inputBlock input{
+
+    width:320px;
+
+    padding:8px 12px;
+
+    font-size:17px;
+
+    border:1px solid #000;
+
+    outline:none;
+
+    background:#fff;
+
+    color:#000;
+
+}
+
+.inputBlock input:focus{
+
+    border:2px solid #000;
+
+}
+
+/*---------------------------------------------------------
+    Buttons
+---------------------------------------------------------*/
+
+button{
+
+    padding:10px 22px;
+
+    background:white;
+
+    color:black;
+
+    border:1.5px solid black;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:0.2s;
+
+}
+
+button:hover{
+
+    background:black;
+
+    color:white;
+
+}
+
+/*---------------------------------------------------------
+    Information Bar
+---------------------------------------------------------*/
+
+.info{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:40px;
+
+    margin-bottom:18px;
+
+    font-size:18px;
+
+    font-weight:500;
+
+}
+
+/*---------------------------------------------------------
+    Graph Area
+---------------------------------------------------------*/
+
+#cy{
+
+    width:100%;
+
+    height:900px;
+
+    background:white;
+
+    border:2px solid black;
+
+}
+
+/*---------------------------------------------------------
+    Footer
+---------------------------------------------------------*/
+
+footer{
+
+    margin-top:18px;
+
+    text-align:center;
+
+    font-size:15px;
+
+    color:#444;
+
+}
+
+/*---------------------------------------------------------
+    Cytoscape Node Font
+---------------------------------------------------------*/
+
+.cy-node-label{
+
+    font-family:'STIX Two Math', serif;
+
+}
+
+/*---------------------------------------------------------
+    Responsive
+---------------------------------------------------------*/
+
+@media (max-width:900px){
+
+    .toolbar{
+
+        flex-direction:column;
+
+    }
+
+    .inputBlock{
+
+        flex-direction:column;
+
+    }
+
+    .inputBlock input{
+
+        width:100%;
+
+    }
+
+    #cy{
+
+        height:700px;
+
+    }
+
+}
+
+/*----------------------------------------
+Legend
+----------------------------------------*/
+
+.legend{
+
+display:flex;
+
+justify-content:center;
+
+gap:40px;
+
+margin-bottom:15px;
+
+font-size:18px;
+
+}
+
+.legend div{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.solid{
+
+display:inline-block;
+
+width:45px;
+
+height:0;
+
+border-top:3px solid black;
+
+}
+
+.dashed{
+
+display:inline-block;
+
+width:45px;
+
+height:0;
+
+border-top:3px dashed black;
+
+}
