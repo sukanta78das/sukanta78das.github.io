@@ -1,0 +1,155 @@
+{
+    "events": [
+        {
+            "date": "2027-03-03",
+            "endDate": "2027-03-05",
+            "type": "Conference",
+            "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2027)",
+            "description": "Sixth Asian Symposium on Cellular Automata Technology held at Institute of Mathematics and Applications, Bhubaneswar, India.",
+            "url": "https://ascat.cellularautomata.in/2027/"
+        },
+        {
+            "date": "2026-02-25",
+            "endDate": "2026-02-27",
+            "type": "Conference",
+            "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2026)",
+            "description": "Fifth Asian Symposium on Cellular Automata Technology held at NIT Calicut, India.",
+            "url": "https://ascat.cellularautomata.in/2026/"
+        },
+        {
+            "date": "2025-03-06",
+            "endDate": "2025-03-08",
+            "type": "Conference",
+            "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2025)",
+            "description": "Fourth Asian Symposium on Cellular Automata Technology held at Birla Institute of Technology, Mesra, Ranchi, India.",
+            "url": "https://conference.bitmesra.ac.in/ascat2025/Home"
+        },
+        {
+            "date": "2024-02-29",
+            "endDate": "2024-03-02",
+            "type": "Conference",
+            "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2024)",
+            "description": "Third Asian Symposium on Cellular Automata Technology held in hybrid mode at NIT Durgapur, India.",
+            "url": "https://ascat.cellularautomata.in/2024/"
+        },
+        {
+            "date": "2023-03-02",
+            "endDate": "2023-03-04",
+            "type": "Conference",
+            "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2023)",
+            "description": "Second Asian Symposium on Cellular Automata Technology held in hybrid mode at IIEST Shibpur, India.",
+            "url": "https://ascat.cellularautomata.in/2023/"
+        },
+        {
+            "date": "2022-03-03",
+            "endDate": "2022-03-05",
+            "type": "Conference",
+            "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2022)",
+            "description": "First Asian Symposium on Cellular Automata Technology, held online (IIEST Shibpur, India).",
+            "url": "https://www.cellularautomata.in/ascat2022/"
+        },
+        {
+            "date": "2026-06-01",
+            "endDate": "2026-07-31",
+            "type": "School",
+            "title": "Indian Summer School on Cellular Automata 2026",
+            "description": "Indian Summer School on Cellular Automata is a flagship event of the Cellular Automata India. Its aim is to promote cellular automata research in India, as well as the other parts of the world.",
+            "url": "https://school.cellularautomata.in/2026/"
+        },         
+        {
+            "date": "2025-05-19",
+            "endDate": "2025-07-18",
+            "type": "School",
+            "title": "Indian Summer School on Cellular Automata 2025",
+            "description": "Fifth edition of the Indian Summer School on Cellular Automata, a research-oriented program on cellular automata theory and applications.",
+            "url": "https://school.cellularautomata.in/2025/"
+        },        
+        {
+            "date": "2024-05-27",
+            "endDate": "2024-07-26",
+            "type": "School",
+            "title": "Indian Summer School on Cellular Automata Technology 2024",
+            "description": "Organized by Cellular Automata India",
+            "url": "https://school.cellularautomata.in/2024/"
+        },        
+        {
+            "date": "2023-05-22",
+            "endDate": "2023-07-21",
+            "type": "School",
+            "title": "Summer School on Cellular Automata Technology 2023",
+            "description": "Organized by Cellular Automata India in association with University of Béjaïa, Algeria.",
+            "url": "https://school.cellularautomata.in/2023/"
+        },
+        {
+            "date": "2022-05-23",
+            "endDate": "2022-07-22",
+            "type": "School",
+            "title": "Indian Summer School on Cellular Automata 2022",
+            "description": "This is the second year of internship program on Cellular Automata: Theory and Applications for the undergraduate students. This year the internship is more rigorously project based and the theory relevant to the projects will be discussed in class.",
+            "url": "https://school.cellularautomata.in/2022/"
+        },
+        {
+            "date": "2021-06-15",
+            "endDate": "2021-08-01",
+            "type": "School",
+            "title": "Indian Summer School on Cellular Automata 2021",
+            "description": "This is the first year of internship program on Cellular Automata: Theory and Applications for the undergraduate students. The mode of internship is online.",
+            "url": "https://school.cellularautomata.in/2021/"
+        },
+
+        
+        {
+            "date": "2026-06-01",
+            "endDate": "2026-06-05",
+            "type": "Workshop",
+            "title": "Workshop on Logic and Automata (WoLA 2026)",
+            "description": "This one-week workshop will not only serve the researchers and practitioners, but also create interests among the young minds to work on foundational aspects of computer science. It will also play as an advanced guide for the participants to explore the theory and applications of automata theory and logic and will open up more research options for them to continue. Five-day workshop on logic, automata, cellular automata and in-memory computing organized by the Department of Information Technology, IIEST Shibpur.",
+            "url": "https://workshop.cellularautomata.in/WOLA/"
+        },
+        {
+            "date": "2025-09-13",
+            "endDate": "2025-09-14",
+            "type": "Webinar",
+            "title": "Tribute to Kenichi Morita.",
+            "description": "Let us collectively tribute our beloved Kenichi - recall his contributions, personality and memories ...",
+            "url": "https://workshop.cellularautomata.in/index.html"
+        },
+        {
+            "date": "2024-04-27",
+            "endDate": "2024-05-18",
+            "type": "Lecture series 2",
+            "title": "Understanding Reversibility Edward Fredkin Memorial Lectures",
+            "description": "The series is dedicated to the contributions of the pioneer in reversible computing, Edward Fredkin whom we lost on 13 June 2023. Our focus for this series is on the theme of Reversibility across various scientific disciplines.",
+            "url": "https://workshop.cellularautomata.in/index.html"
+        },
+        {
+            "date": "2021-04-10",
+            "endDate": "2021-04-25",
+            "type": "Lecture series 1",
+            "title": "A Tribute to John Conway A Lecture Series on the Memory of Prof. Conway",
+            "description": "Prof. John Horton Conway was a legendary mathematician who stood out for his love of games and for bringing mathematics to the masses. He one of the most versatile mathematicians of the past century, a wizard, polymath, and storyteller, and a natural problem-solver whose unassisted feats often left his colleagues stunned.",
+            "url": "https://workshop.cellularautomata.in/index.html"
+        },
+        {
+            "date": "2021-03-15",
+            "endDate": "2021-03-19",
+            "type": "Workshop",
+            "title": "One-week Online Workshop on Cellular Automata and Secured Hardware Design held on March 15 - 19, 2021",
+            "url": "https://workshop.cellularautomata.in/index.html"
+        },
+        {
+            "date": "2020-08-16",
+            "endDate": "2021-02-20",
+            "type": "Webinar",
+            "title": "First Webinar Series",
+            "url": "https://workshop.cellularautomata.in/index.html"
+        },
+        {
+            "date": "2021-06-19",
+            "endDate": "2021-08-28",
+            "type": "Webinar",
+            "title": "Second Webinar Series",
+            "url": "https://workshop.cellularautomata.in/index.html"
+        }
+    ]
+}
