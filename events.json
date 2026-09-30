@@ -5,7 +5,7 @@
             "endDate": "2027-03-05",
             "type": "Conference",
             "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2027)",
-            "description": "Sixth Asian Symposium on Cellular Automata Technology held at Institute of Mathematics and Applications, Bhubaneswar, India.",
+            "description": "Sixth Asian Symposium on Cellular Automata Technology to be held at Institute of Mathematics and Applications, Bhubaneswar, India.",
             "url": "https://ascat.cellularautomata.in/2027/"
         },
         {
@@ -29,7 +29,7 @@
             "endDate": "2024-03-02",
             "type": "Conference",
             "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2024)",
-            "description": "Third Asian Symposium on Cellular Automata Technology held in hybrid mode at NIT Durgapur, India.",
+            "description": "Third Asian Symposium on Cellular Automata Technology held at NIT Durgapur, India.",
             "url": "https://ascat.cellularautomata.in/2024/"
         },
         {
@@ -37,7 +37,7 @@
             "endDate": "2023-03-04",
             "type": "Conference",
             "title": "Asian Symposium on Cellular Automata Technology (ASCAT 2023)",
-            "description": "Second Asian Symposium on Cellular Automata Technology held in hybrid mode at IIEST Shibpur, India.",
+            "description": "Second Asian Symposium on Cellular Automata Technology held at IIEST Shibpur, India.",
             "url": "https://ascat.cellularautomata.in/2023/"
         },
         {
@@ -110,8 +110,8 @@
             "date": "2025-09-13",
             "endDate": "2025-09-14",
             "type": "Webinar",
-            "title": "Tribute to Kenichi Morita.",
-            "description": "Let us collectively tribute our beloved Kenichi - recall his contributions, personality and memories ...",
+            "title": "Tribute to Kenichi Morita",
+            "description": "A webinar to tribute our beloved Kenichi - recalling his contrubutions, personality and memories.",
             "url": "https://workshop.cellularautomata.in/index.html"
         },
         {
